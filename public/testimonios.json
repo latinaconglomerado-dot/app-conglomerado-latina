@@ -1,0 +1,4 @@
+{
+  "nota": "Arreglo de reseñas reales. Vacío: la sección muestra «Próximamente reseñas de nuestros clientes» y un enlace a WhatsApp. Cada item: nombre (persona real), ciudad (opcional), texto (cita textual), video (opcional, URL http o https de una reseña en video). No inventes citas ni nombres.",
+  "items": []
+}

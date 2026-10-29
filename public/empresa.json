@@ -1,0 +1,4 @@
+{
+  "nota": "vehiculosEnFlota es el único dato de tamaño de flota. Déjalo en null para ocultar la cifra «Vehículos en flota». Cuando el número esté confirmado, pon un entero mayor que 0. No uses una cifra estimada.",
+  "vehiculosEnFlota": null
+}

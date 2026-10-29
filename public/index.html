@@ -79,6 +79,15 @@
   </figure>
 </section>
 
+<section class="stats" aria-label="Datos de la empresa">
+  <ul class="wrap stats-in" id="stats-in">
+    <li><strong>4 años</strong><span>en el mercado</span></li>
+    <li><strong>Cobertura nacional</strong><span>en todo el Ecuador</span></li>
+    <li><strong>4 ciudades</strong><span>Quito, Guayaquil, Cuenca y Machala</span></li>
+    <li id="stat-flota" hidden><strong id="stat-flota-num"></strong><span>Vehículos en flota</span></li>
+  </ul>
+</section>
+
 <section class="band" aria-label="Datos del servicio">
   <ul class="wrap band-in">
     <li>
@@ -198,14 +207,23 @@
   <div class="wrap">
     <div class="sec-h reveal">
       <p class="kicker">Confianza</p>
-      <h2>Opiniones de clientes</h2>
-      <p class="sub">Todavía no publicamos testimonios. Este espacio queda reservado para opiniones reales.</p>
+      <h2>Reseñas de clientes</h2>
     </div>
-    <ul class="quotes">
-      <li class="reveal"><p class="tag">Sin publicar</p><p class="ph">[por completar: testimonio]</p><p class="who">[por completar: nombre y ciudad]</p></li>
-      <li class="reveal"><p class="tag">Sin publicar</p><p class="ph">[por completar: testimonio]</p><p class="who">[por completar: nombre y ciudad]</p></li>
-      <li class="reveal"><p class="tag">Sin publicar</p><p class="ph">[por completar: testimonio]</p><p class="who">[por completar: nombre y ciudad]</p></li>
-    </ul>
+    <div id="testimonios-vacio">
+      <p class="sub">Próximamente reseñas de nuestros clientes.</p>
+      <a class="btn" id="testimonios-wa" href="#">Escríbenos por WhatsApp</a>
+    </div>
+    <ul id="testimonios" class="quotes" hidden></ul>
+  </div>
+</section>
+
+<section id="alianzas" class="sec alt" hidden>
+  <div class="wrap">
+    <div class="sec-h">
+      <p class="kicker">Respaldo</p>
+      <h2>Alianzas y certificaciones</h2>
+    </div>
+    <ul id="alianzas-list" class="logos"></ul>
   </div>
 </section>
 

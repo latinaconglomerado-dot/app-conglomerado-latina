@@ -22,6 +22,13 @@ npm start                # http://localhost:3000
 | `GOOGLE_SHEETS_WEBHOOK_URL` | URL del Web App de Apps Script. Si está vacía, no se envía nada a Sheets. |
 | `GOOGLE_SHEETS_TOKEN` | Secreto compartido con `TOKEN` en `google-apps-script/Code.gs`. |
 
+## Confianza
+Tres archivos, sin cifras ni nombres inventados:
+
+- `public/empresa.json`: solo `vehiculosEnFlota`. En `null` no se muestra «Vehículos en flota». Cuando el número esté confirmado, pon un entero mayor que 0. El banner ya muestra los datos verificados: 4 años en el mercado, cobertura nacional y 4 ciudades (Quito, Guayaquil, Cuenca y Machala).
+- `public/testimonios.json`: arreglo `items`. Vacío, la sección dice «Próximamente reseñas de nuestros clientes» y ofrece WhatsApp. Cada reseña real: `nombre`, `ciudad` (opcional), `texto` y `video` (opcional, URL http o https). No escribas citas de ejemplo.
+- `public/alianzas.json`: arreglo `items`. Vacío, la sección «Alianzas y certificaciones» queda oculta. Cada una: `nombre`, `logo` (ruta de imagen) y `url`. Solo socios o certificaciones confirmados.
+
 ## Precios y flota
 Los precios y las unidades están en `public/vehiculos.json`.
 

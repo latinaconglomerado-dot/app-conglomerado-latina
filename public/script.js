@@ -1,10 +1,14 @@
 const WHATSAPP_NUMERO = '[por completar]';
-const wa = document.getElementById('wa');
-if (/^\d{11,15}$/.test(WHATSAPP_NUMERO)) {
-  wa.href = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Hola, quisiera información sobre la renta de vehículos.')}`;
-} else {
-  wa.addEventListener('click', (e) => { e.preventDefault(); alert('El número de WhatsApp aún no está configurado.'); });
+function enlazarWhatsApp(el) {
+  if (!el) return;
+  if (/^\d{11,15}$/.test(WHATSAPP_NUMERO)) {
+    el.href = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Hola, quisiera información sobre la renta de vehículos.')}`;
+  } else {
+    el.addEventListener('click', (e) => { e.preventDefault(); alert('El número de WhatsApp aún no está configurado.'); });
+  }
 }
+enlazarWhatsApp(document.getElementById('wa'));
+enlazarWhatsApp(document.getElementById('testimonios-wa'));
 document.getElementById('y').textContent = new Date().getFullYear();
 
 function cedulaValida(c) {
@@ -320,6 +324,72 @@ fetch('/entregas/entregas.json').then((r) => r.json()).then((data) => {
   });
 }).catch(() => {});
 light.addEventListener('close', () => { if (light._origen) light._origen.focus(); });
+
+fetch('/empresa.json').then((r) => r.json()).then((data) => {
+  const n = data && data.vehiculosEnFlota;
+  if (!Number.isInteger(n) || n < 1) return;
+  document.getElementById('stat-flota-num').textContent = String(n);
+  const li = document.getElementById('stat-flota');
+  li.hidden = false;
+  li.parentElement.classList.add('has-flota');
+}).catch(() => {});
+
+fetch('/testimonios.json').then((r) => r.json()).then((data) => {
+  const items = (data.items || []).filter((t) => t && String(t.texto || '').trim() && String(t.nombre || '').trim());
+  if (!items.length) return;
+  const list = document.getElementById('testimonios');
+  document.getElementById('testimonios-vacio').hidden = true;
+  list.hidden = false;
+  items.forEach((t) => {
+    const li = document.createElement('li');
+    const quote = document.createElement('p');
+    quote.className = 'ph';
+    quote.textContent = String(t.texto).trim();
+    const who = document.createElement('p');
+    who.className = 'who';
+    who.textContent = [String(t.nombre).trim(), String(t.ciudad || '').trim()].filter(Boolean).join(' · ');
+    li.append(quote, who);
+    const video = String(t.video || '').trim();
+    if (/^https:\/\//.test(video)) {
+      const a = document.createElement('a');
+      a.className = 'quote-video';
+      a.href = video;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = 'Ver reseña en video';
+      li.append(a);
+    }
+    list.append(li);
+  });
+}).catch(() => {});
+
+fetch('/alianzas.json').then((r) => r.json()).then((data) => {
+  const items = (data.items || []).filter((a) => a && String(a.nombre || '').trim());
+  if (!items.length) return;
+  const section = document.getElementById('alianzas');
+  const list = document.getElementById('alianzas-list');
+  items.forEach((item) => {
+    const li = document.createElement('li');
+    const url = String(item.url || '').trim();
+    const box = /^https:\/\//.test(url) ? document.createElement('a') : document.createElement('span');
+    if (box.tagName === 'A') { box.href = url; box.target = '_blank'; box.rel = 'noopener'; }
+    const logo = String(item.logo || '').trim();
+    if (logo) {
+      const img = document.createElement('img');
+      img.src = logo;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      box.append(img);
+    }
+    const name = document.createElement('span');
+    name.textContent = String(item.nombre).trim();
+    box.append(name);
+    li.append(box);
+    list.append(li);
+  });
+  section.hidden = false;
+}).catch(() => {});
 
 const navToggle = document.getElementById('nav-toggle');
 const siteNav = document.getElementById('site-nav');

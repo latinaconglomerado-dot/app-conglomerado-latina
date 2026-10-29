@@ -1,0 +1,4 @@
+{
+  "nota": "Alianzas y certificaciones reales. Vacío: la sección no se muestra. Cada item: nombre, logo (ruta a una imagen, por ejemplo images/alianzas/logo.webp) y url (https). No agregues aseguradoras, sellos ni socios que no estén confirmados.",
+  "items": []
+}
