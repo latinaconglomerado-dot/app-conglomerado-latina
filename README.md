@@ -45,7 +45,7 @@ Las fotos de `Entregas a nuestros clientes` salen de `public/entregas/entregas.j
 2. Escribe la descripción en `titulo`.
 3. Pon `"referencial": false` para quitar la leyenda «Imagen referencial». Mientras sea `true`, la foto no se presenta como un cliente real.
 
-Las fotos de cada unidad están en `public/images/flota/` con el mismo esquema (`sedan-01`, `suv-01`, `pickup-01` = Camionetas, y así). `contacto` es el banner del formulario.
+Las fotos de cada unidad están en `public/images/flota/`: `sedan-01` a `sedan-03` en Sedán, `suv-01` a `suv-03` en SUV y `pickup-01` a `pickup-03` en Camionetas. No uses las láminas `contacto`.
 
 ## Google Sheets
 La hoja ya existe (id `1s_uKwkZUrm7KUX_lQ6FH47KZ4lNG-s5VlBKUU8NyWRc`, pestaña `Solicitudes`). El servidor solo escribe ahí si las dos variables de entorno están definidas. Si faltan, la reserva se guarda igual en JSON y Excel.
@@ -95,7 +95,7 @@ Manual:
 **Fly.io**: `fly volumes create datos --size 1`, monta el volumen en `/data`, `DATA_DIR=/data` y `ADMIN_PASSWORD` como secreto.
 
 ## Imágenes de la página
-El hero y `public/og.jpg` siguen siendo fotografías ilustrativas de Unsplash. La flota, el banner del formulario y la galería de entregas usan las imágenes de marketing en WebP; llevan el logo y «Imagen referencial» en la propia foto, y el sitio repite esa leyenda.
+El hero y `public/og.jpg` siguen siendo fotografías ilustrativas de Unsplash. La flota y la galería de entregas usan las imágenes de marketing en WebP; llevan el logo y «Imagen referencial» en la propia foto, y el sitio repite esa leyenda. Las láminas de contacto no se publican.
 
 ## Personalización pendiente
 - **WhatsApp**: `WHATSAPP_NUMERO` en `public/script.js` (formato `593XXXXXXXXX`).
