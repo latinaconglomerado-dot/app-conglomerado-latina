@@ -1,5 +1,5 @@
 {
-  "nota": "Precios en USD por día. precioDia en null hereda el precio del tipo o el rango. Las fotos son referenciales y no son una toma exacta de cada modelo.",
+  "nota": "Precios en USD por día. precioDia en null hereda el precio del tipo o el rango. imagen es el PNG propio (public/images/vehiculos/<slug>.png). Si ese archivo no existe, el sitio usa imagenReferencia. Mientras se muestre la referencia, la ficha lleva «Imagen referencial».",
   "tipos": [
     {
       "id": "sedan",
@@ -30,15 +30,15 @@
     }
   ],
   "vehiculos": [
-    { "id": "sedan-1", "tipo": "sedan", "nombre": "Kia Soluto", "imagen": "images/flota/sedan-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "sedan-2", "tipo": "sedan", "nombre": "Chevrolet Onix", "imagen": "images/flota/sedan-02", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "sedan-3", "tipo": "sedan", "nombre": "Chang'an V3", "imagen": "images/flota/sedan-03", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "suv-1", "tipo": "suv", "nombre": "Glory 500", "imagen": "images/flota/suv-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "suv-2", "tipo": "suv", "nombre": "Glory 550", "imagen": "images/flota/suv-02", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "suv-3", "tipo": "suv", "nombre": "Glory 560", "imagen": "images/flota/suv-03", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "suv-4", "tipo": "suv", "nombre": "Geely X70", "imagen": "images/flota/suv-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "camioneta-1", "tipo": "camionetas", "nombre": "JAC T8", "imagen": "images/flota/pickup-01", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
-    { "id": "camioneta-2", "tipo": "camionetas", "nombre": "D-Max High Ride", "imagen": "images/flota/pickup-02", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
-    { "id": "camioneta-3", "tipo": "camionetas", "nombre": "Terralord", "imagen": "images/flota/pickup-03", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null }
+    { "id": "kia-soluto", "tipo": "sedan", "nombre": "Kia Soluto", "imagen": "images/vehiculos/kia-soluto.png", "imagenReferencia": "images/flota/sedan-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "chevrolet-onix", "tipo": "sedan", "nombre": "Chevrolet Onix", "imagen": "images/vehiculos/chevrolet-onix.png", "imagenReferencia": "images/flota/sedan-02", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "changan-alsvin", "tipo": "sedan", "nombre": "Changan Alsvin", "imagen": "images/vehiculos/changan-alsvin.png", "imagenReferencia": "images/flota/sedan-03", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "glory-500", "tipo": "suv", "nombre": "Glory 500", "imagen": "images/vehiculos/glory-500.png", "imagenReferencia": "images/flota/suv-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "glory-560", "tipo": "suv", "nombre": "Glory 560", "imagen": "images/vehiculos/glory-560.png", "imagenReferencia": "images/flota/suv-02", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "glory-580", "tipo": "suv", "nombre": "Glory 580", "imagen": "images/vehiculos/glory-580.png", "imagenReferencia": "images/flota/suv-03", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "jetour-x70", "tipo": "suv", "nombre": "Jetour X70", "imagen": "images/vehiculos/jetour-x70.png", "imagenReferencia": "images/flota/suv-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "jac-t8", "tipo": "camionetas", "nombre": "JAC T8", "imagen": "images/vehiculos/jac-t8.png", "imagenReferencia": "images/flota/pickup-01", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
+    { "id": "chevrolet-d-max-high-ride", "tipo": "camionetas", "nombre": "Chevrolet D-Max High Ride", "imagen": "images/vehiculos/chevrolet-d-max-high-ride.png", "imagenReferencia": "images/flota/pickup-02", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
+    { "id": "toyota-hilux", "tipo": "camionetas", "nombre": "Toyota Hilux", "imagen": "images/vehiculos/toyota-hilux.png", "imagenReferencia": "images/flota/pickup-03", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null }
   ]
 }

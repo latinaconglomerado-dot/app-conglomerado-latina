@@ -53,6 +53,17 @@ function setFoto(img, base, sizes) {
   img.loading = 'lazy';
   img.decoding = 'async';
 }
+function setFotoModelo(img, vehiculo, sizes) {
+  setFoto(img, vehiculo.imagenReferencia, sizes);
+  if (!vehiculo.imagen) return;
+  const prueba = new Image();
+  prueba.onload = () => {
+    img.removeAttribute('srcset');
+    img.sizes = '';
+    img.src = vehiculo.imagen;
+  };
+  prueba.src = vehiculo.imagen;
+}
 function precioTipo(tipo) {
   if (tipo.precioDia != null) return `$${tipo.precioDia} / día`;
   if (tipo.precioDesde != null) return `Desde $${tipo.precioDesde} / día`;
@@ -179,7 +190,7 @@ function elegirTipo(id) {
     b.type = 'button';
     b.className = 'tcard';
     const img = document.createElement('img');
-    setFoto(img, v.imagen, '(min-width: 980px) 340px, (min-width: 720px) 45vw, 100vw');
+    setFotoModelo(img, v, '(min-width: 980px) 340px, (min-width: 720px) 45vw, 100vw');
     const body = document.createElement('span');
     body.className = 'vbody';
     const title = document.createElement('span');

@@ -36,7 +36,7 @@ Los precios y las unidades están en `public/vehiculos.json`.
 - **SUV:** `precioDia` en null, `precioDesde` = `60` y `precioHasta` = `85`. El botón del tipo dice `Desde $60 / día` y cada SUV sin precio propio muestra `$60–$85 / día`.
 - **Camionetas:** `precioDia` = `90` → `$90 / día`.
 - Para un precio fijo de una unidad, pon `precioDia` en ese vehículo. Si sigue en `null`, hereda el precio del tipo o el rango. No escribas un número por modelo si aún no existe.
-- Los modelos publicados son Kia Soluto, Chevrolet Onix, Chang'an V3, Glory 500, Glory 550, Glory 560, Geely X70, JAC T8, D-Max High Ride y Terralord. `specs` sigue en `[por completar]` hasta tener la ficha real. Geely X70 reutiliza la foto `suv-01`.
+- Modelos publicados: Sedán Kia Soluto, Chevrolet Onix y Changan Alsvin; SUV Glory 500, Glory 560, Glory 580 y Jetour X70; Camionetas JAC T8, Chevrolet D-Max High Ride y Toyota Hilux. Cada uno apunta a `public/images/vehiculos/<slug>.png`. Si ese PNG no está, se usa la foto de referencia en `imagenReferencia` y se mantiene «Imagen referencial». Jetour X70 reutiliza `suv-01` hasta que llegue su PNG. `specs` sigue en `[por completar]`.
 
 ## Entregas (galería)
 Las fotos de `Entregas a nuestros clientes` salen de `public/entregas/entregas.json`. El campo `imagen` es la ruta sin sufijo: el sitio carga `imagen-800.webp` e `imagen-1600.webp` (por ejemplo `images/entregas/entrega-01`).
