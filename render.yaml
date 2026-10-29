@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: conglomerado-latina
+    name: renta-car-ecuador
     runtime: node
     plan: free
     buildCommand: npm install
@@ -8,3 +8,7 @@ services:
     envVars:
       - key: ADMIN_PASSWORD
         generateValue: true
+      - key: GOOGLE_SHEETS_WEBHOOK_URL
+        sync: false
+      - key: GOOGLE_SHEETS_TOKEN
+        sync: false

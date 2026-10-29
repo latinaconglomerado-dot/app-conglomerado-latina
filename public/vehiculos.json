@@ -1,0 +1,43 @@
+{
+  "nota": "Precios en USD por día. precioDia es un precio fijo del tipo o de una unidad. Si precioDia es null y el tipo tiene precioDesde y precioHasta, el botón del tipo dice «Desde $X / día» y cada unidad sin precio propio muestra el rango. No pongas un precio inventado por modelo: deja precioDia en null hasta tenerlo. Los nombres [por completar] no son la flota real.",
+  "tipos": [
+    {
+      "id": "sedan",
+      "nombre": "Sedán",
+      "resumen": "Cómodo y eficiente para ciudad y carretera.",
+      "imagen": "images/sedan.webp",
+      "precioDia": 55,
+      "precioDesde": null,
+      "precioHasta": null
+    },
+    {
+      "id": "suv",
+      "nombre": "SUV",
+      "resumen": "Espacio y altura para viajes en familia y rutas variadas.",
+      "imagen": "images/suv.webp",
+      "precioDia": null,
+      "precioDesde": 60,
+      "precioHasta": 85
+    },
+    {
+      "id": "camionetas",
+      "nombre": "Camionetas",
+      "resumen": "Para carga, trabajo y terrenos exigentes.",
+      "imagen": "images/pickup.webp",
+      "precioDia": 90,
+      "precioDesde": null,
+      "precioHasta": null
+    }
+  ],
+  "vehiculos": [
+    { "id": "sedan-1", "tipo": "sedan", "nombre": "[por completar: nombre del sedán 1]", "imagen": "images/sedan.webp", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "sedan-2", "tipo": "sedan", "nombre": "[por completar: nombre del sedán 2]", "imagen": "images/sedan.webp", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "sedan-3", "tipo": "sedan", "nombre": "[por completar: nombre del sedán 3]", "imagen": "images/sedan.webp", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "suv-1", "tipo": "suv", "nombre": "[por completar: nombre del SUV 1]", "imagen": "images/suv.webp", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "suv-2", "tipo": "suv", "nombre": "[por completar: nombre del SUV 2]", "imagen": "images/suv.webp", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "suv-3", "tipo": "suv", "nombre": "[por completar: nombre del SUV 3]", "imagen": "images/suv.webp", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "camioneta-1", "tipo": "camionetas", "nombre": "[por completar: nombre de la camioneta 1]", "imagen": "images/pickup.webp", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
+    { "id": "camioneta-2", "tipo": "camionetas", "nombre": "[por completar: nombre de la camioneta 2]", "imagen": "images/pickup.webp", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
+    { "id": "camioneta-3", "tipo": "camionetas", "nombre": "[por completar: nombre de la camioneta 3]", "imagen": "images/pickup.webp", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null }
+  ]
+}

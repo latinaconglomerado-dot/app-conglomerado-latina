@@ -1,0 +1,11 @@
+{
+  "nota": "Cada entrada es un espacio para una foto real de una entrega. Mientras referencial sea true, el sitio muestra la leyenda «Imagen referencial» y no la presenta como un cliente real. Para publicar una foto: sustituye el archivo de imagen y pon referencial en false.",
+  "items": [
+    { "id": "entrega-1", "titulo": "[por completar: descripción de la entrega]", "imagen": "entregas/entrega-1.svg", "referencial": true },
+    { "id": "entrega-2", "titulo": "[por completar: descripción de la entrega]", "imagen": "entregas/entrega-2.svg", "referencial": true },
+    { "id": "entrega-3", "titulo": "[por completar: descripción de la entrega]", "imagen": "entregas/entrega-3.svg", "referencial": true },
+    { "id": "entrega-4", "titulo": "[por completar: descripción de la entrega]", "imagen": "entregas/entrega-4.svg", "referencial": true },
+    { "id": "entrega-5", "titulo": "[por completar: descripción de la entrega]", "imagen": "entregas/entrega-5.svg", "referencial": true },
+    { "id": "entrega-6", "titulo": "[por completar: descripción de la entrega]", "imagen": "entregas/entrega-6.svg", "referencial": true }
+  ]
+}
