@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es-EC">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Conglomerado Latina · Renta de vehículos en Ecuador</title>
+<meta name="description" content="Conglomerado Latina: renta de vehículos en Ecuador. Reserva y obtén un 10% de descuento.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#inicio"><span class="logo">CL</span> Conglomerado Latina</a>
+    <nav>
+      <a href="#nosotros">Nosotros</a><a href="#beneficios">Beneficios</a><a href="#vehiculos">Vehículos</a>
+      <a class="btn btn-sm" href="#reserva">Reservar</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section id="inicio" class="hero">
+  <div class="wrap">
+    <p class="pill">Renta de vehículos · Ecuador</p>
+    <h1>Muévete con confianza por todo el Ecuador</h1>
+    <p class="lead">Rentamos el vehículo que necesitas, para trabajo, viaje o familia. Reserva en línea y recibe un <strong>10% de descuento</strong>.</p>
+    <div class="cta">
+      <a class="btn" href="#reserva">Reservar ahora</a>
+      <a class="btn btn-ghost" href="#vehiculos">Ver tipos de vehículos</a>
+    </div>
+  </div>
+</section>
+
+<section id="nosotros" class="sec">
+  <div class="wrap two">
+    <div>
+      <h2>Quiénes somos</h2>
+      <p><strong>Conglomerado Latina</strong> es una empresa ecuatoriana dedicada a la renta de vehículos. Nuestro compromiso es ofrecerte un servicio claro, cercano y confiable.</p>
+      <p class="todo">[por completar: historia de la empresa, años de experiencia, ciudades de operación]</p>
+    </div>
+    <ul class="facts">
+      <li><b>Ubicación</b><span>[por completar: dirección]</span></li>
+      <li><b>Horario</b><span>[por completar: horario de atención]</span></li>
+      <li><b>Contacto</b><span>[por completar: teléfono / WhatsApp]</span></li>
+    </ul>
+  </div>
+</section>
+
+<section id="beneficios" class="sec alt">
+  <div class="wrap">
+    <h2>Por qué elegirnos</h2>
+    <div class="grid4">
+      <article class="card hl"><div class="ico">%</div><h3>10% de descuento</h3><p>Disfruta de un 10% de descuento al realizar tu reserva con nosotros.</p><small class="todo">[por completar: condiciones del descuento]</small></article>
+      <article class="card"><div class="ico">✓</div><h3>Reserva sencilla</h3><p>Completa el formulario en minutos y nos pondremos en contacto contigo.</p></article>
+      <article class="card"><div class="ico">⇄</div><h3>Retiro y entrega</h3><p>Indícanos el lugar y fechas que prefieres para retirar y entregar el vehículo.</p></article>
+      <article class="card"><div class="ico">$</div><h3>Formas de pago</h3><p>Efectivo, transferencia o tarjeta de crédito/débito, según tu comodidad.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="vehiculos" class="sec">
+  <div class="wrap">
+    <h2>Tipos de vehículos</h2>
+    <p class="sub">Elige la categoría que mejor se adapte a tu plan. Tarifas: <span class="todo">[por completar]</span></p>
+    <div class="grid4">
+      <article class="card veh"><div class="vi">🚗</div><h3>Sedán</h3><p>Cómodo y eficiente para ciudad y carretera.</p></article>
+      <article class="card veh"><div class="vi">🚙</div><h3>SUV</h3><p>Espacio y altura para viajes en familia y rutas variadas.</p></article>
+      <article class="card veh"><div class="vi">🛻</div><h3>Camioneta</h3><p>Ideal para carga, trabajo y terrenos exigentes.</p></article>
+      <article class="card veh"><div class="vi">🚐</div><h3>Van</h3><p>Pensada para grupos grandes y traslados.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="reserva" class="sec alt">
+  <div class="wrap narrow">
+    <h2>Reserva tu vehículo</h2>
+    <p class="sub">Déjanos tus datos y nos comunicaremos contigo. Al reservar accedes a tu <strong>10% de descuento</strong>.</p>
+    <form id="form" novalidate class="form">
+      <div id="ok" class="alert ok" hidden role="status"></div>
+      <div id="err" class="alert bad" hidden role="alert"></div>
+
+      <fieldset><legend>Datos personales</legend>
+        <label>Nombre completo<input name="nombre" autocomplete="name" required maxlength="100"><em></em></label>
+        <label>Número de cédula<input name="cedula" inputmode="numeric" maxlength="10" placeholder="10 dígitos" required><em></em></label>
+        <div class="row">
+          <label>Teléfono / WhatsApp<input name="telefono" type="tel" autocomplete="tel" placeholder="0991234567" required><em></em></label>
+          <label>Correo electrónico<input name="correo" type="email" autocomplete="email" required><em></em></label>
+        </div>
+      </fieldset>
+
+      <fieldset><legend>Tu renta</legend>
+        <div class="row">
+          <label>Tipo de vehículo
+            <select name="tipoVehiculo" required><option value="">Selecciona…</option><option>Sedán</option><option>SUV</option><option>Camioneta</option><option>Van</option></select><em></em></label>
+          <label>Días de renta<input name="dias" type="number" min="1" max="365" required><em></em></label>
+        </div>
+        <div class="row">
+          <label>Fecha de retiro<input name="fechaRetiro" type="date" required><em></em></label>
+          <label>Fecha de entrega<input name="fechaEntrega" type="date" required><em></em></label>
+        </div>
+        <label>Lugar de retiro / entrega<input name="lugar" placeholder="Ciudad y sector o dirección" required maxlength="200"><em></em></label>
+        <label>Método de pago
+          <select name="metodoPago" required><option value="">Selecciona…</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta de crédito/débito</option><option>Otro</option></select><em></em></label>
+        <p class="note">🔒 No te pedimos números de tarjeta. El pago se coordina directamente con nuestro equipo.</p>
+      </fieldset>
+
+      <label class="check"><input type="checkbox" name="consentimiento" required>
+        <span>Autorizo el tratamiento de mis datos personales para gestionar mi reserva y que Conglomerado Latina me contacte, conforme a la Ley Orgánica de Protección de Datos Personales. <span class="todo">[por completar: enlace a política de privacidad]</span></span></label>
+      <em class="cerr"></em>
+      <button class="btn btn-block" type="submit">Enviar solicitud</button>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div><strong>Conglomerado Latina</strong><br><span class="todo">[por completar: dirección · teléfono · correo]</span></div>
+    <div>© <span id="y"></span> Conglomerado Latina. Todos los derechos reservados.</div>
+  </div>
+</footer>
+
+<!-- Reemplazar WHATSAPP_NUMERO en script.js por el número real (formato 593XXXXXXXXX) -->
+<a id="wa" class="wa" href="#" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20.5 3.5A11.8 11.8 0 0 0 2.1 17.8L1 23l5.3-1.4a11.8 11.8 0 0 0 5.6 1.4h0A11.8 11.8 0 0 0 20.5 3.5zM12 21.1a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.1.8.8-3-.2-.4a9.8 9.8 0 1 1 7.9 4.2zm5.4-7.3c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-.9 1.1-.3.2-.6 0a8 8 0 0 1-4-3.5c-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.5l-.9-2.1c-.2-.6-.5-.5-.7-.5h-.6a1.1 1.1 0 0 0-.8.4 3.4 3.4 0 0 0-1 2.5 5.9 5.9 0 0 0 1.2 3.1 13.4 13.4 0 0 0 5.1 4.5c1.9.8 2.6.9 3.5.7a3 3 0 0 0 2-1.4 2.5 2.5 0 0 0 .2-1.4c-.1-.1-.3-.2-.6-.3z"/></svg>
+  <span>WhatsApp</span>
+</a>
+<script src="script.js"></script>
+</body>
+</html>
