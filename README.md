@@ -36,7 +36,7 @@ Los precios y las unidades están en `public/vehiculos.json`.
 - **SUV:** `precioDia` en null, `precioDesde` = `60` y `precioHasta` = `85`. El botón del tipo dice `Desde $60 / día` y cada SUV sin precio propio muestra `$60–$85 / día`.
 - **Camionetas:** `precioDia` = `90` → `$90 / día`.
 - Para un precio fijo de una unidad, pon `precioDia` en ese vehículo. Si sigue en `null`, hereda el precio del tipo o el rango. No escribas un número por modelo si aún no existe.
-- Los nombres `[por completar]` son espacios editables, no la flota real. Cambia `nombre`, `imagen` y `specs`.
+- Los modelos publicados son Kia Soluto, Chevrolet Onix, Chang'an V3, Glory 500, Glory 550, Glory 560, Geely X70, JAC T8, D-Max High Ride y Terralord. `specs` sigue en `[por completar]` hasta tener la ficha real. Geely X70 reutiliza la foto `suv-01`.
 
 ## Entregas (galería)
 Las fotos de `Entregas a nuestros clientes` salen de `public/entregas/entregas.json`. El campo `imagen` es la ruta sin sufijo: el sitio carga `imagen-800.webp` e `imagen-1600.webp` (por ejemplo `images/entregas/entrega-01`).
@@ -99,7 +99,7 @@ El hero y `public/og.jpg` siguen siendo fotografías ilustrativas de Unsplash. L
 
 ## Personalización pendiente
 - **WhatsApp**: `WHATSAPP_NUMERO` en `public/script.js` (formato `593XXXXXXXXX`).
-- Textos `[por completar]` (dirección, horario, teléfono, condiciones del 10%, política de privacidad, nombres de unidades).
+- Textos `[por completar]` (dirección, horario, teléfono, condiciones del 10%, política de privacidad, ficha técnica de cada unidad).
 - Colores en `:root` de `public/styles.css` (carbón `#1b1e23`, carmesí `#9f1239`, papel `#f7f4f0`).
 
 ## Seguridad / privacidad

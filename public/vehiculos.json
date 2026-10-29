@@ -1,5 +1,5 @@
 {
-  "nota": "Precios en USD por día. precioDia es un precio fijo del tipo o de una unidad. Si precioDia es null y el tipo tiene precioDesde y precioHasta, el botón del tipo dice «Desde $X / día» y cada unidad sin precio propio muestra el rango. No pongas un precio inventado por modelo: deja precioDia en null hasta tenerlo. Los nombres [por completar] no son la flota real.",
+  "nota": "Precios en USD por día. precioDia en null hereda el precio del tipo o el rango. Las fotos son referenciales y no son una toma exacta de cada modelo.",
   "tipos": [
     {
       "id": "sedan",
@@ -30,14 +30,15 @@
     }
   ],
   "vehiculos": [
-    { "id": "sedan-1", "tipo": "sedan", "nombre": "[por completar: nombre del sedán 1]", "imagen": "images/flota/sedan-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "sedan-2", "tipo": "sedan", "nombre": "[por completar: nombre del sedán 2]", "imagen": "images/flota/sedan-02", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "sedan-3", "tipo": "sedan", "nombre": "[por completar: nombre del sedán 3]", "imagen": "images/flota/sedan-03", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "suv-1", "tipo": "suv", "nombre": "[por completar: nombre del SUV 1]", "imagen": "images/flota/suv-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "suv-2", "tipo": "suv", "nombre": "[por completar: nombre del SUV 2]", "imagen": "images/flota/suv-02", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "suv-3", "tipo": "suv", "nombre": "[por completar: nombre del SUV 3]", "imagen": "images/flota/suv-03", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "camioneta-1", "tipo": "camionetas", "nombre": "[por completar: nombre de la camioneta 1]", "imagen": "images/flota/pickup-01", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
-    { "id": "camioneta-2", "tipo": "camionetas", "nombre": "[por completar: nombre de la camioneta 2]", "imagen": "images/flota/pickup-02", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
-    { "id": "camioneta-3", "tipo": "camionetas", "nombre": "[por completar: nombre de la camioneta 3]", "imagen": "images/flota/pickup-03", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null }
+    { "id": "sedan-1", "tipo": "sedan", "nombre": "Kia Soluto", "imagen": "images/flota/sedan-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "sedan-2", "tipo": "sedan", "nombre": "Chevrolet Onix", "imagen": "images/flota/sedan-02", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "sedan-3", "tipo": "sedan", "nombre": "Chang'an V3", "imagen": "images/flota/sedan-03", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "suv-1", "tipo": "suv", "nombre": "Glory 500", "imagen": "images/flota/suv-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "suv-2", "tipo": "suv", "nombre": "Glory 550", "imagen": "images/flota/suv-02", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "suv-3", "tipo": "suv", "nombre": "Glory 560", "imagen": "images/flota/suv-03", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "suv-4", "tipo": "suv", "nombre": "Geely X70", "imagen": "images/flota/suv-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "camioneta-1", "tipo": "camionetas", "nombre": "JAC T8", "imagen": "images/flota/pickup-01", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
+    { "id": "camioneta-2", "tipo": "camionetas", "nombre": "D-Max High Ride", "imagen": "images/flota/pickup-02", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
+    { "id": "camioneta-3", "tipo": "camionetas", "nombre": "Terralord", "imagen": "images/flota/pickup-03", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null }
   ]
 }
