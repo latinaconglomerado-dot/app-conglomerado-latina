@@ -182,6 +182,8 @@ footer nav a:hover{text-decoration:underline}
 .fine a{color:#fff;text-underline-offset:2px}
 footer .todo{color:#3d2a00}
 
+footer button.enlace{background:none;border:0;padding:0;color:#fff;font:inherit;font-weight:650;cursor:pointer}
+.reservar-sticky{display:none}
 .wa{position:fixed;right:16px;bottom:16px;z-index:40;display:flex;align-items:center;gap:8px;background:#128c48;color:#fff;text-decoration:none;font-weight:700;padding:14px;min-height:48px;border-radius:50%;box-shadow:0 8px 22px #0004}
 .wa span{display:none}
 .wa:hover{background:#0e753c}
@@ -260,5 +262,8 @@ dialog::backdrop{background:#1b1e23cc}
   .hero-copy{padding:36px 22px 42px}
   .sec{padding:64px 0}
   .wa span{display:none}
-  .wa{padding:14px;border-radius:50%}
+  .wa{bottom:84px}
+  .reservar-sticky{display:block;position:fixed;left:0;right:0;bottom:0;z-index:35;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#f7f4f0f5;border-top:1px solid var(--line)}
+  .reservar-sticky .btn{width:100%}
+  body{padding-bottom:76px}
 }

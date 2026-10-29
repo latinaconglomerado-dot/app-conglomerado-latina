@@ -29,7 +29,8 @@ function doPost(e) {
       body.conductor || '',
       body.encargado || '',
       body.metodoPago || '',
-      body.premioRuleta || ''
+      body.premioRuleta || '',
+      body.ubicacion || ''
     ]);
     return out({ ok: true });
   } catch (err) {

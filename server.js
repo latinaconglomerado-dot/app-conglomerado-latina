@@ -33,7 +33,7 @@ const PAGOS = ['Efectivo', 'Transferencia', 'Tarjeta de crédito/débito', 'Otro
 const CATALOGO = path.join(__dirname, 'public', 'vehiculos.json');
 const XLSX_FILE = path.join(DATA_DIR, 'solicitudes.xlsx');
 const PREMIOS_RULETA = ['10% de descuento', '20% de descuento', '10% de descuento', '20% de descuento', '1 día gratis de renta'];
-const ENCABEZADOS = ['Fecha de registro', 'Nombre completo', 'Cédula', 'Teléfono/WhatsApp', 'Correo', 'Tipo de vehículo', 'Vehículo', 'Fecha inicio renta', 'Fecha fin renta', 'Días', 'Lugar retiro/entrega', 'Conductor', 'Persona a cargo', 'Método de pago', 'Precio', 'Consentimiento', 'Premio ruleta'];
+const ENCABEZADOS = ['Fecha de registro', 'Nombre completo', 'Cédula', 'Teléfono/WhatsApp', 'Correo', 'Tipo de vehículo', 'Vehículo', 'Fecha inicio renta', 'Fecha fin renta', 'Días', 'Lugar de entrega del vehículo', 'Conductor', 'Persona a cargo', 'Método de pago', 'Precio', 'Consentimiento', 'Premio ruleta', 'Ubicación'];
 
 function catalogo() {
   return JSON.parse(fs.readFileSync(CATALOGO, 'utf8'));
@@ -63,6 +63,7 @@ function filaExport(r) {
     r.precio ?? '',
     r.consentimiento ? 'sí' : 'no',
     r.premioRuleta ?? '',
+    r.ubicacion ?? '',
   ];
 }
 async function escribirExcel(rows) {
@@ -97,6 +98,7 @@ function notificarHoja(reg) {
     encargado: reg.encargado,
     metodoPago: reg.metodoPago,
     premioRuleta: reg.premioRuleta || '',
+    ubicacion: reg.ubicacion || '',
   };
   fetch(url, {
     method: 'POST',
@@ -150,14 +152,22 @@ function validar(b) {
   if (d.encargado.length < 5 || d.encargado.length > 100 || !/^[\p{L}][\p{L}\s'.-]+$/u.test(d.encargado) || d.encargado.split(' ').length < 2)
     e.encargado = 'Ingresa el nombre y apellido de la persona a cargo.';
   const cat = catalogo();
-  const veh = (cat.vehiculos || []).find((v) => v.id === t('vehiculoId'));
-  const tipo = veh && (cat.tipos || []).find((tp) => tp.id === veh.tipo);
-  if (!veh || !tipo) e.vehiculoId = 'Elige un vehículo de la lista.';
-  else {
-    d.vehiculoId = veh.id;
-    d.tipo = tipo.nombre;
-    d.vehiculo = veh.nombre;
-    d.precio = precioDe(tipo, veh);
+  const tipo = (cat.tipos || []).find((tp) => tp.nombre === t('tipo'));
+  if (!tipo) e.tipo = 'Selecciona un tipo de vehículo.';
+  else d.tipo = tipo.nombre;
+  const idVeh = t('vehiculoId');
+  if (idVeh) {
+    const veh = (cat.vehiculos || []).find((v) => v.id === idVeh);
+    if (!veh || !tipo || veh.tipo !== tipo.id) e.vehiculoId = 'El vehículo no corresponde al tipo elegido.';
+    else {
+      d.vehiculoId = veh.id;
+      d.vehiculo = veh.nombre;
+      d.precio = precioDe(tipo, veh);
+    }
+  } else if (tipo) {
+    d.vehiculoId = '';
+    d.vehiculo = '';
+    d.precio = precioDe(tipo, {});
   }
   d.fechaInicio = t('fechaInicio'); d.fechaFin = t('fechaFin');
   if (!esFecha(d.fechaInicio) || d.fechaInicio < hoy()) e.fechaInicio = 'Selecciona una fecha de inicio válida (hoy o posterior).';
@@ -173,8 +183,10 @@ function validar(b) {
     d.dias = diasEnviados;
     if (!diasOk) e.dias = 'Ingresa un número de días entre 1 y 365.';
   }
+  d.ubicacion = t('ubicacion');
+  if (d.ubicacion.length < 2 || d.ubicacion.length > 120) e.ubicacion = 'Indica tu ciudad o ubicación.';
   d.lugar = t('lugar');
-  if (d.lugar.length < 3 || d.lugar.length > 200) e.lugar = 'Indica el lugar de retiro/entrega.';
+  if (d.lugar.length < 3 || d.lugar.length > 200) e.lugar = 'Indica el lugar de entrega del vehículo.';
   d.metodoPago = t('metodoPago');
   if (!PAGOS.includes(d.metodoPago)) e.metodoPago = 'Selecciona un método de pago.';
   if (b.consentimiento !== true && b.consentimiento !== 'true' && b.consentimiento !== 'on') e.consentimiento = 'Debes aceptar el tratamiento de tus datos.';

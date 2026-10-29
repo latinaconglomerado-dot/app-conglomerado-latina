@@ -205,6 +205,52 @@ function elegirTipo(id) {
   wrap.hidden = false;
 }
 
+function llenarUnidades(tipoNombre, seleccion) {
+  const sel = form.vehiculoId;
+  const tipo = catalogo.tipos.find((t) => t.nombre === tipoNombre);
+  const actual = seleccion ?? '';
+  sel.replaceChildren();
+  const vacio = document.createElement('option');
+  vacio.value = '';
+  vacio.textContent = 'Sin especificar';
+  sel.append(vacio);
+  if (tipo) {
+    catalogo.vehiculos.filter((v) => v.tipo === tipo.id).forEach((v) => {
+      const o = document.createElement('option');
+      o.value = v.id;
+      o.textContent = v.nombre;
+      sel.append(o);
+    });
+  }
+  sel.value = [...sel.options].some((o) => o.value === actual) ? actual : '';
+}
+function resumenElegido() {
+  const tipo = catalogo.tipos.find((t) => t.nombre === form.tipo.value);
+  const veh = catalogo.vehiculos.find((v) => v.id === form.vehiculoId.value);
+  const el = document.getElementById('vehiculo-elegido');
+  if (veh && tipo) el.textContent = `${tipo.nombre} · ${veh.nombre} · ${precioVehiculo(veh, tipo)}`;
+  else if (tipo) el.textContent = tipo.nombre;
+  else el.textContent = 'Completa tu reserva.';
+}
+function abrirFormulario(opts = {}) {
+  const tipoNombre = opts.tipo || catalogo.tipos.find((t) => t.id === tipoActivo)?.nombre || form.tipo.value;
+  if (tipoNombre) form.tipo.value = tipoNombre;
+  llenarUnidades(form.tipo.value, opts.vehiculoId || '');
+  const fechaSel = document.getElementById('selector-fecha').value;
+  if (opts.fechaInicio || (!form.fechaInicio.value && fechaSel)) form.fechaInicio.value = opts.fechaInicio || fechaSel;
+  form.fechaFin.min = form.fechaInicio.value || hoy;
+  if (form.fechaFin.value && form.fechaFin.value < form.fechaInicio.value) form.fechaFin.value = '';
+  const cond = document.getElementById('selector-conductor').value.trim().replace(/\s+/g, ' ');
+  if (opts.conductor) form.conductor.value = opts.conductor;
+  else if (!form.conductor.value && nombreConductorOk(cond)) form.conductor.value = cond;
+  porFechas();
+  resumenElegido();
+  const nav = document.getElementById('site-nav');
+  if (nav) nav.classList.remove('open');
+  dlg._origen = opts.origen || document.activeElement;
+  if (!dlg.open) dlg.showModal();
+  (form.tipo.value ? form.nombre : form.tipo).focus();
+}
 function abrirReserva(v, tipo, origen) {
   if (!validarSelector()) {
     const bad = document.querySelector('#selector .invalid input');
@@ -212,25 +258,29 @@ function abrirReserva(v, tipo, origen) {
     else if (bad) bad.focus();
     return;
   }
-  form.vehiculoId.value = v.id;
-  form.fechaInicio.value = document.getElementById('selector-fecha').value;
-  form.fechaFin.min = form.fechaInicio.value || hoy;
-  if (form.fechaFin.value && form.fechaFin.value < form.fechaInicio.value) form.fechaFin.value = '';
-  form.conductor.value = document.getElementById('selector-conductor').value.trim().replace(/\s+/g, ' ');
-  porFechas();
-  document.getElementById('vehiculo-elegido').textContent = `${tipo.nombre} · ${v.nombre} · ${precioVehiculo(v, tipo)}`;
-  document.getElementById('vehiculo-error').textContent = '';
-  dlg.dataset.origen = '';
-  dlg._origen = origen;
-  if (!dlg.open) dlg.showModal();
-  form.nombre.focus();
+  abrirFormulario({
+    tipo: tipo.nombre,
+    vehiculoId: v.id,
+    fechaInicio: document.getElementById('selector-fecha').value,
+    conductor: document.getElementById('selector-conductor').value.trim().replace(/\s+/g, ' '),
+    origen,
+  });
 }
+document.querySelectorAll('.abrir-reserva').forEach((b) => b.addEventListener('click', () => abrirFormulario({ origen: b })));
+form.tipo.addEventListener('change', () => { llenarUnidades(form.tipo.value, ''); resumenElegido(); });
+form.vehiculoId.addEventListener('change', resumenElegido);
 
 document.getElementById('cerrar-reserva').addEventListener('click', () => dlg.close());
 dlg.addEventListener('close', () => { if (dlg._origen) dlg._origen.focus(); });
 
 const reglas = {
-  vehiculoId: (v) => !!v || 'Elige un vehículo de la lista.',
+  tipo: (v) => !!v || 'Selecciona un tipo de vehículo.',
+  vehiculoId: (v) => {
+    if (!v) return true;
+    const tipo = catalogo.tipos.find((t) => t.nombre === form.tipo.value);
+    const veh = catalogo.vehiculos.find((x) => x.id === v);
+    return !!(tipo && veh && veh.tipo === tipo.id) || 'El vehículo no corresponde al tipo elegido.';
+  },
   nombre: (v) => v.trim().split(/\s+/).length >= 2 && v.trim().length >= 5 || 'Ingresa tu nombre y apellido completos.',
   cedula: (v) => cedulaValida(v) || 'Cédula inválida. Debe tener 10 dígitos válidos.',
   telefono: (v) => { v = v.replace(/[\s-]/g, ''); return /^(\+593|0)?9\d{8}$|^(\+593|0)[2-7]\d{7}$/.test(v) || 'Ingresa un teléfono válido (ej. 0991234567).'; },
@@ -240,12 +290,12 @@ const reglas = {
   dias: (v) => (Number.isInteger(+v) && +v >= 1 && +v <= 365) || 'Ingresa un número de días entre 1 y 365.',
   fechaInicio: (v) => (!!v && v >= hoy) || 'Selecciona una fecha de inicio válida (hoy o posterior).',
   fechaFin: (v) => (!!v && v >= form.fechaInicio.value) || 'La fecha de fin debe ser igual o posterior al inicio.',
-  lugar: (v) => v.trim().length >= 3 || 'Indica el lugar de retiro/entrega.',
+  ubicacion: (v) => v.trim().length >= 2 || 'Indica tu ciudad o ubicación.',
+  lugar: (v) => v.trim().length >= 3 || 'Indica el lugar de entrega del vehículo.',
   metodoPago: (v) => !!v || 'Selecciona un método de pago.',
 };
 function mostrar(name, msg) {
   if (name === 'consentimiento') { form.querySelector('.cerr').textContent = msg || ''; return; }
-  if (name === 'vehiculoId') { document.getElementById('vehiculo-error').textContent = msg || ''; return; }
   const el = form[name]; if (!el) return;
   const l = el.closest('label'); if (!l) return;
   l.classList.toggle('invalid', !!msg);
@@ -272,6 +322,7 @@ form.addEventListener('submit', async (ev) => {
     if (r.ok && j.ok) {
       form.reset();
       form.fechaInicio.min = hoy; form.fechaFin.min = hoy;
+      llenarUnidades('', '');
       document.getElementById('vehiculo-elegido').textContent = 'Solicitud registrada.';
       ok.textContent = `¡Gracias! Recibimos tu solicitud (N.º ${j.id}). Nos pondremos en contacto contigo pronto.`;
       ok.hidden = false;
@@ -498,7 +549,7 @@ btnGirar.addEventListener('click', async () => {
   }
 });
 document.getElementById('ruleta-cerrar').addEventListener('click', () => dlgRuleta.close());
-document.getElementById('ruleta-reservar').addEventListener('click', () => dlgRuleta.close());
+document.getElementById('ruleta-reservar').addEventListener('click', () => { dlgRuleta.close(); abrirFormulario({ origen: btnGirar }); });
 dlgRuleta.addEventListener('close', () => btnGirar.focus());
 
 const navToggle = document.getElementById('nav-toggle');
