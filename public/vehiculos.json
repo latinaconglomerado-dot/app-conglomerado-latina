@@ -5,7 +5,7 @@
       "id": "sedan",
       "nombre": "Sedán",
       "resumen": "Cómodo y eficiente para ciudad y carretera.",
-      "imagen": "images/sedan.webp",
+      "imagen": "images/flota/sedan-01",
       "precioDia": 55,
       "precioDesde": null,
       "precioHasta": null
@@ -14,7 +14,7 @@
       "id": "suv",
       "nombre": "SUV",
       "resumen": "Espacio y altura para viajes en familia y rutas variadas.",
-      "imagen": "images/suv.webp",
+      "imagen": "images/flota/suv-01",
       "precioDia": null,
       "precioDesde": 60,
       "precioHasta": 85
@@ -23,21 +23,21 @@
       "id": "camionetas",
       "nombre": "Camionetas",
       "resumen": "Para carga, trabajo y terrenos exigentes.",
-      "imagen": "images/pickup.webp",
+      "imagen": "images/flota/pickup-01",
       "precioDia": 90,
       "precioDesde": null,
       "precioHasta": null
     }
   ],
   "vehiculos": [
-    { "id": "sedan-1", "tipo": "sedan", "nombre": "[por completar: nombre del sedán 1]", "imagen": "images/sedan.webp", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "sedan-2", "tipo": "sedan", "nombre": "[por completar: nombre del sedán 2]", "imagen": "images/sedan.webp", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "sedan-3", "tipo": "sedan", "nombre": "[por completar: nombre del sedán 3]", "imagen": "images/sedan.webp", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "suv-1", "tipo": "suv", "nombre": "[por completar: nombre del SUV 1]", "imagen": "images/suv.webp", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "suv-2", "tipo": "suv", "nombre": "[por completar: nombre del SUV 2]", "imagen": "images/suv.webp", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "suv-3", "tipo": "suv", "nombre": "[por completar: nombre del SUV 3]", "imagen": "images/suv.webp", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
-    { "id": "camioneta-1", "tipo": "camionetas", "nombre": "[por completar: nombre de la camioneta 1]", "imagen": "images/pickup.webp", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
-    { "id": "camioneta-2", "tipo": "camionetas", "nombre": "[por completar: nombre de la camioneta 2]", "imagen": "images/pickup.webp", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
-    { "id": "camioneta-3", "tipo": "camionetas", "nombre": "[por completar: nombre de la camioneta 3]", "imagen": "images/pickup.webp", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null }
+    { "id": "sedan-1", "tipo": "sedan", "nombre": "[por completar: nombre del sedán 1]", "imagen": "images/flota/sedan-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "sedan-2", "tipo": "sedan", "nombre": "[por completar: nombre del sedán 2]", "imagen": "images/flota/sedan-02", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "sedan-3", "tipo": "sedan", "nombre": "[por completar: nombre del sedán 3]", "imagen": "images/flota/sedan-03", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "suv-1", "tipo": "suv", "nombre": "[por completar: nombre del SUV 1]", "imagen": "images/flota/suv-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "suv-2", "tipo": "suv", "nombre": "[por completar: nombre del SUV 2]", "imagen": "images/flota/suv-02", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "suv-3", "tipo": "suv", "nombre": "[por completar: nombre del SUV 3]", "imagen": "images/flota/suv-03", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
+    { "id": "camioneta-1", "tipo": "camionetas", "nombre": "[por completar: nombre de la camioneta 1]", "imagen": "images/flota/pickup-01", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
+    { "id": "camioneta-2", "tipo": "camionetas", "nombre": "[por completar: nombre de la camioneta 2]", "imagen": "images/flota/pickup-02", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null },
+    { "id": "camioneta-3", "tipo": "camionetas", "nombre": "[por completar: nombre de la camioneta 3]", "imagen": "images/flota/pickup-03", "specs": "[por completar: pasajeros, carga, transmisión]", "precioDia": null }
   ]
 }

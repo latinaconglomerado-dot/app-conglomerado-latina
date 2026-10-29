@@ -37,6 +37,18 @@ document.getElementById('selector-conductor').addEventListener('blur', () => { i
 let catalogo = { tipos: [], vehiculos: [] };
 let tipoActivo = '';
 
+function setFoto(img, base, sizes) {
+  const small = base + '-800.webp';
+  const large = base + '-1600.webp';
+  img.src = small;
+  img.srcset = `${small} 800w, ${large} 1600w`;
+  img.sizes = sizes;
+  img.width = 1600;
+  img.height = 900;
+  img.alt = '';
+  img.loading = 'lazy';
+  img.decoding = 'async';
+}
 function precioTipo(tipo) {
   if (tipo.precioDia != null) return `$${tipo.precioDia} / día`;
   if (tipo.precioDesde != null) return `Desde $${tipo.precioDesde} / día`;
@@ -62,7 +74,7 @@ function renderTipos() {
     b.className = 'tcard';
     b.setAttribute('aria-pressed', tipo.id === tipoActivo ? 'true' : 'false');
     const img = document.createElement('img');
-    img.src = tipo.imagen; img.alt = ''; img.width = 1100; img.height = 734;
+    setFoto(img, tipo.imagen, '(min-width: 980px) 340px, (min-width: 720px) 45vw, 100vw');
     const body = document.createElement('span');
     body.className = 'vbody';
     const title = document.createElement('span');
@@ -85,7 +97,10 @@ function renderTipos() {
     const pick = document.createElement('span');
     pick.className = 'pick';
     pick.textContent = tipo.id === tipoActivo ? 'Seleccionado' : 'Elegir';
-    body.append(pick);
+    const ref = document.createElement('span');
+    ref.className = 'cap';
+    ref.textContent = 'Imagen referencial';
+    body.append(pick, ref);
     b.dataset.id = tipo.id;
     b.append(img, body);
     b.addEventListener('click', () => elegirTipo(tipo.id));
@@ -160,7 +175,7 @@ function elegirTipo(id) {
     b.type = 'button';
     b.className = 'tcard';
     const img = document.createElement('img');
-    img.src = v.imagen; img.alt = ''; img.width = 1100; img.height = 734;
+    setFoto(img, v.imagen, '(min-width: 980px) 340px, (min-width: 720px) 45vw, 100vw');
     const body = document.createElement('span');
     body.className = 'vbody';
     const title = document.createElement('span');
@@ -175,7 +190,10 @@ function elegirTipo(id) {
     const pick = document.createElement('span');
     pick.className = 'pick';
     pick.textContent = 'Elegir';
-    body.append(title, specs, price, pick);
+    const ref = document.createElement('span');
+    ref.className = 'cap';
+    ref.textContent = 'Imagen referencial';
+    body.append(title, specs, price, pick, ref);
     b.append(img, body);
     b.addEventListener('click', () => abrirReserva(v, tipo, b));
     list.append(b);
@@ -276,7 +294,7 @@ fetch('/entregas/entregas.json').then((r) => r.json()).then((data) => {
     b.type = 'button';
     b.className = 'shot';
     const img = document.createElement('img');
-    img.src = item.imagen; img.alt = ''; img.width = 1200; img.height = 800;
+    setFoto(img, item.imagen, '(min-width: 980px) 340px, (min-width: 720px) 45vw, 100vw');
     const cap = document.createElement('span');
     const title = document.createElement('strong');
     title.textContent = item.titulo;
@@ -290,7 +308,8 @@ fetch('/entregas/entregas.json').then((r) => r.json()).then((data) => {
     b.append(img, cap);
     b.addEventListener('click', () => {
       const pic = document.getElementById('light-img');
-      pic.src = item.imagen;
+      setFoto(pic, item.imagen, 'min(960px, calc(100vw - 48px))');
+      pic.loading = 'eager';
       pic.alt = item.referencial ? 'Imagen referencial' : (item.titulo || '');
       document.getElementById('light-titulo').textContent = item.titulo || '';
       document.getElementById('light-cap').textContent = item.referencial ? 'Imagen referencial' : '';

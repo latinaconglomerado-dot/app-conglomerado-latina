@@ -32,11 +32,13 @@ Los precios y las unidades están en `public/vehiculos.json`.
 - Los nombres `[por completar]` son espacios editables, no la flota real. Cambia `nombre`, `imagen` y `specs`.
 
 ## Entregas (galería)
-Las fotos de `Entregas a nuestros clientes` salen de `public/entregas/entregas.json` y de los archivos en `public/entregas/`.
+Las fotos de `Entregas a nuestros clientes` salen de `public/entregas/entregas.json`. El campo `imagen` es la ruta sin sufijo: el sitio carga `imagen-800.webp` e `imagen-1600.webp` (por ejemplo `images/entregas/entrega-01`).
 
-1. Sustituye `entrega-1.svg` (y las demás) por la foto real, o cambia el campo `imagen`.
+1. Genera esos dos WebP (unos 800 y 1600 px de ancho) y actualiza `imagen`, o sustituye los archivos que ya están en `public/images/entregas/`.
 2. Escribe la descripción en `titulo`.
 3. Pon `"referencial": false` para quitar la leyenda «Imagen referencial». Mientras sea `true`, la foto no se presenta como un cliente real.
+
+Las fotos de cada unidad están en `public/images/flota/` con el mismo esquema (`sedan-01`, `suv-01`, `pickup-01` = Camionetas, y así). `contacto` es el banner del formulario.
 
 ## Google Sheets
 La hoja ya existe (id `1s_uKwkZUrm7KUX_lQ6FH47KZ4lNG-s5VlBKUU8NyWRc`, pestaña `Solicitudes`). El servidor solo escribe ahí si las dos variables de entorno están definidas. Si faltan, la reserva se guarda igual en JSON y Excel.
@@ -67,7 +69,7 @@ Manual:
 **Fly.io**: `fly volumes create datos --size 1`, monta el volumen en `/data`, `DATA_DIR=/data` y `ADMIN_PASSWORD` como secreto.
 
 ## Imágenes de la página
-`public/images` y `public/og.jpg` son fotografías ilustrativas de vehículos (Unsplash), no la flota. La galería de entregas usa gráficos de relleno hasta que se reemplacen.
+El hero y `public/og.jpg` siguen siendo fotografías ilustrativas de Unsplash. La flota, el banner del formulario y la galería de entregas usan las imágenes de marketing en WebP; llevan el logo y «Imagen referencial» en la propia foto, y el sitio repite esa leyenda.
 
 ## Personalización pendiente
 - **WhatsApp**: `WHATSAPP_NUMERO` en `public/script.js` (formato `593XXXXXXXXX`).

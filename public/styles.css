@@ -215,13 +215,16 @@ dialog{border:0;padding:0;background:transparent}
 dialog::backdrop{background:#1b1e23cc}
 .sheet{width:min(720px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto}
 .sheet .form{margin:0}
+.contacto-fig{margin:0 0 14px;position:relative}
+.contacto-fig img{display:block;width:100%;height:210px;object-fit:contain;object-position:center;background:#1b1e23;border-radius:12px}
+.contacto-fig figcaption{position:absolute;right:10px;bottom:10px;margin:0;background:#1b1e23cc;color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:999px}
 .dlg-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .dlg-top h2{margin-top:0}
 .cerrar{background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 14px;min-height:44px;font:inherit;font-weight:700;color:var(--navy);cursor:pointer}
 .galeria{margin-top:8px}
 .shot{display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--white);cursor:pointer;font:inherit;color:inherit;text-align:left}
 .shot span{display:block;padding:12px 14px 16px}
-.cap{margin:4px 0 0;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.cap{display:block;margin:4px 0 0;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
 .light{width:min(960px,calc(100vw - 24px));background:var(--white);border-radius:18px;padding:16px}
 .light img{width:100%;height:auto;border-radius:12px}
 @media(min-width:720px){.tipo-btns{grid-template-columns:repeat(3,1fr)}.galeria{grid-template-columns:1fr 1fr}}
