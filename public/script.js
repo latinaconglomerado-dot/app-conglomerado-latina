@@ -265,6 +265,7 @@ form.addEventListener('submit', async (ev) => {
   btn.disabled = true; btn.textContent = 'Enviando…';
   const data = Object.fromEntries(Object.keys(reglas).map((n) => [n, form[n].value]));
   data.consentimiento = true;
+  data.premioRuleta = document.getElementById('premio-ruleta').value;
   try {
     const r = await fetch('/api/solicitudes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     const j = await r.json();
@@ -390,6 +391,115 @@ fetch('/alianzas.json').then((r) => r.json()).then((data) => {
   });
   section.hidden = false;
 }).catch(() => {});
+
+const SEGMENTOS = [
+  { corto: '10%', premio: '10% de descuento', fondo: '#9f1239', tinta: '#ffffff' },
+  { corto: '20%', premio: '20% de descuento', fondo: '#1b1e23', tinta: '#ffd6de' },
+  { corto: '10%', premio: '10% de descuento', fondo: '#9f1239', tinta: '#ffffff' },
+  { corto: '20%', premio: '20% de descuento', fondo: '#1b1e23', tinta: '#ffd6de' },
+  { corto: '1 día gratis', premio: '1 día gratis de renta', fondo: '#ffd6de', tinta: '#1b1e23' },
+];
+const RULETA_CLAVE = 'rce-ruleta-v1';
+const lienzo = document.getElementById('ruleta');
+const btnGirar = document.getElementById('girar');
+const dlgRuleta = document.getElementById('ruleta-dialog');
+
+function dibujarRuleta() {
+  const ctx = lienzo.getContext('2d');
+  const n = SEGMENTOS.length;
+  const arco = (Math.PI * 2) / n;
+  const cx = lienzo.width / 2;
+  const r = cx - 6;
+  ctx.clearRect(0, 0, lienzo.width, lienzo.height);
+  ctx.save();
+  ctx.translate(cx, cx);
+  ctx.rotate(-Math.PI / 2);
+  SEGMENTOS.forEach((seg, i) => {
+    const a0 = i * arco;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, r, a0, a0 + arco);
+    ctx.closePath();
+    ctx.fillStyle = seg.fondo;
+    ctx.fill();
+    ctx.save();
+    ctx.rotate(a0 + arco / 2);
+    ctx.fillStyle = seg.tinta;
+    ctx.font = '700 26px Manrope, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(seg.corto, r - 28, 0);
+    ctx.restore();
+  });
+  ctx.beginPath();
+  ctx.arc(0, 0, 42, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  ctx.restore();
+}
+function anguloSegmento(i) {
+  const centro = (i + 0.5) * (360 / SEGMENTOS.length);
+  return 360 * 5 + (360 - centro);
+}
+function guardarPremio(premio) {
+  document.getElementById('premio-ruleta').value = premio;
+  const aviso = document.getElementById('premio-aviso');
+  aviso.hidden = false;
+  aviso.textContent = `Premio ruleta: ${premio}`;
+}
+function mostrarPremio(premio) {
+  document.getElementById('ruleta-resultado').textContent = premio;
+  document.getElementById('ruleta-estado').textContent = `Tu premio: ${premio}`;
+  if (!dlgRuleta.open) dlgRuleta.showModal();
+  document.getElementById('ruleta-reservar').focus();
+}
+function aplicarGiroGuardado(guardado) {
+  lienzo.style.transition = 'none';
+  lienzo.style.transform = `rotate(${anguloSegmento(guardado.indice)}deg)`;
+  guardarPremio(guardado.premio);
+  btnGirar.disabled = true;
+  btnGirar.textContent = 'Ya usaste tu giro';
+  document.getElementById('ruleta-estado').textContent = `Tu premio: ${guardado.premio}`;
+}
+dibujarRuleta();
+try {
+  const previo = JSON.parse(localStorage.getItem(RULETA_CLAVE) || 'null');
+  if (previo && SEGMENTOS[previo.indice] && SEGMENTOS[previo.indice].premio === previo.premio) aplicarGiroGuardado(previo);
+} catch (_) {}
+btnGirar.addEventListener('click', async () => {
+  if (btnGirar.disabled) return;
+  btnGirar.disabled = true;
+  document.getElementById('ruleta-estado').textContent = 'Girando…';
+  try {
+    const r = await fetch('/api/ruleta', { method: 'POST' });
+    const j = await r.json();
+    if (!r.ok || !SEGMENTOS[j.indice] || SEGMENTOS[j.indice].premio !== j.premio) throw new Error('ruleta');
+    localStorage.setItem(RULETA_CLAVE, JSON.stringify({ indice: j.indice, premio: j.premio }));
+    guardarPremio(j.premio);
+    const reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const terminar = () => {
+      btnGirar.textContent = 'Ya usaste tu giro';
+      mostrarPremio(j.premio);
+    };
+    if (reducido) {
+      lienzo.style.transition = 'none';
+      lienzo.style.transform = `rotate(${anguloSegmento(j.indice)}deg)`;
+      terminar();
+      return;
+    }
+    lienzo.style.transition = 'none';
+    void lienzo.offsetWidth;
+    lienzo.style.transition = '';
+    lienzo.style.transform = `rotate(${anguloSegmento(j.indice)}deg)`;
+    lienzo.addEventListener('transitionend', terminar, { once: true });
+  } catch (_) {
+    btnGirar.disabled = false;
+    document.getElementById('ruleta-estado').textContent = 'No se pudo girar. Intenta de nuevo.';
+  }
+});
+document.getElementById('ruleta-cerrar').addEventListener('click', () => dlgRuleta.close());
+document.getElementById('ruleta-reservar').addEventListener('click', () => dlgRuleta.close());
+dlgRuleta.addEventListener('close', () => btnGirar.focus());
 
 const navToggle = document.getElementById('nav-toggle');
 const siteNav = document.getElementById('site-nav');

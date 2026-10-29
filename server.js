@@ -32,7 +32,8 @@ function guardar(rows) {
 const PAGOS = ['Efectivo', 'Transferencia', 'Tarjeta de crédito/débito', 'Otro'];
 const CATALOGO = path.join(__dirname, 'public', 'vehiculos.json');
 const XLSX_FILE = path.join(DATA_DIR, 'solicitudes.xlsx');
-const ENCABEZADOS = ['Fecha de registro', 'Nombre completo', 'Cédula', 'Teléfono/WhatsApp', 'Correo', 'Tipo de vehículo', 'Vehículo', 'Fecha inicio renta', 'Fecha fin renta', 'Días', 'Lugar retiro/entrega', 'Conductor', 'Persona a cargo', 'Método de pago', 'Precio', 'Consentimiento'];
+const PREMIOS_RULETA = ['10% de descuento', '20% de descuento', '10% de descuento', '20% de descuento', '1 día gratis de renta'];
+const ENCABEZADOS = ['Fecha de registro', 'Nombre completo', 'Cédula', 'Teléfono/WhatsApp', 'Correo', 'Tipo de vehículo', 'Vehículo', 'Fecha inicio renta', 'Fecha fin renta', 'Días', 'Lugar retiro/entrega', 'Conductor', 'Persona a cargo', 'Método de pago', 'Precio', 'Consentimiento', 'Premio ruleta'];
 
 function catalogo() {
   return JSON.parse(fs.readFileSync(CATALOGO, 'utf8'));
@@ -61,6 +62,7 @@ function filaExport(r) {
     r.metodoPago ?? '',
     r.precio ?? '',
     r.consentimiento ? 'sí' : 'no',
+    r.premioRuleta ?? '',
   ];
 }
 async function escribirExcel(rows) {
@@ -94,6 +96,7 @@ function notificarHoja(reg) {
     conductor: reg.conductor,
     encargado: reg.encargado,
     metodoPago: reg.metodoPago,
+    premioRuleta: reg.premioRuleta || '',
   };
   fetch(url, {
     method: 'POST',
@@ -175,8 +178,15 @@ function validar(b) {
   d.metodoPago = t('metodoPago');
   if (!PAGOS.includes(d.metodoPago)) e.metodoPago = 'Selecciona un método de pago.';
   if (b.consentimiento !== true && b.consentimiento !== 'true' && b.consentimiento !== 'on') e.consentimiento = 'Debes aceptar el tratamiento de tus datos.';
+  const premio = t('premioRuleta');
+  d.premioRuleta = PREMIOS_RULETA.includes(premio) ? premio : '';
   return { e, d };
 }
+
+app.post('/api/ruleta', (_req, res) => {
+  const indice = crypto.randomInt(0, PREMIOS_RULETA.length);
+  res.json({ ok: true, indice, premio: PREMIOS_RULETA[indice] });
+});
 
 app.post('/api/solicitudes', limitar, async (req, res) => {
   const { e, d } = validar(req.body || {});

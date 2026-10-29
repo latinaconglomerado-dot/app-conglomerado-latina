@@ -156,6 +156,19 @@
         <p>Efectivo, transferencia o tarjeta de crédito/débito, según tu comodidad.</p>
       </article>
     </div>
+    <div class="ruleta-box">
+      <div class="ruleta-copy">
+        <h3>Ruleta de descuentos</h3>
+        <p>Un giro por visita. El premio queda en tu reserva.</p>
+        <button type="button" class="btn" id="girar">Girar la ruleta</button>
+        <p id="ruleta-estado" class="sub" aria-live="polite"></p>
+        <p class="note">Sujeto a disponibilidad y condiciones; válido al concretar la reserva.</p>
+      </div>
+      <div class="ruleta-stage">
+        <div class="ruleta-puntero" aria-hidden="true"></div>
+        <canvas id="ruleta" width="520" height="520" aria-hidden="true"></canvas>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -288,6 +301,8 @@
     <p id="vehiculo-elegido" class="elegido">Elige un vehículo para continuar.</p>
     <em id="vehiculo-error"></em>
     <input type="hidden" name="vehiculoId" value="">
+    <input type="hidden" name="premioRuleta" id="premio-ruleta" value="">
+    <p id="premio-aviso" class="elegido" hidden></p>
     <div id="ok" class="alert ok" hidden role="status"></div>
     <div id="err" class="alert bad" hidden role="alert"></div>
 
@@ -321,6 +336,16 @@
     <em class="cerr"></em>
     <button class="btn btn-block" id="enviar" type="submit">Enviar solicitud</button>
   </form>
+</dialog>
+
+<dialog id="ruleta-dialog" class="sheet" aria-labelledby="ruleta-titulo">
+  <div class="form">
+    <h2 id="ruleta-titulo">Tu premio</h2>
+    <p id="ruleta-resultado" class="ruleta-resultado"></p>
+    <p class="note">Sujeto a disponibilidad y condiciones; válido al concretar la reserva.</p>
+    <a class="btn" id="ruleta-reservar" href="#vehiculos">Reservar con este premio</a>
+    <button type="button" class="cerrar" id="ruleta-cerrar">Cerrar</button>
+  </div>
 </dialog>
 
 <dialog id="lightbox" class="light" aria-labelledby="light-titulo">

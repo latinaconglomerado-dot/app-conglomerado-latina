@@ -59,7 +59,7 @@ La hoja ya existe (id `1s_uKwkZUrm7KUX_lQ6FH47KZ4lNG-s5VlBKUU8NyWRc`, pestaña `
 7. Copia la URL de la aplicación web (`/exec`, no `/dev`).
 8. En Render → Environment, pega esa URL en `GOOGLE_SHEETS_WEBHOOK_URL` y la misma clave en `GOOGLE_SHEETS_TOKEN`.
 
-La fila se agrega en este orden: Fecha de registro, Nombre completo, Cédula, Teléfono/WhatsApp, Correo, Tipo de vehículo, Vehículo, Fecha inicio renta, Fecha fin renta, Días, Lugar retiro/entrega, Conductor, Persona a cargo, Método de pago.
+La fila se agrega en este orden: Fecha de registro, Nombre completo, Cédula, Teléfono/WhatsApp, Correo, Tipo de vehículo, Vehículo, Fecha inicio renta, Fecha fin renta, Días, Lugar retiro/entrega, Conductor, Persona a cargo, Método de pago, Premio ruleta. Si ya publicaste el script, vuelve a pegar `Code.gs`, agrega el encabezado «Premio ruleta» al final de la fila 1 y publica una nueva implementación.
 
 ## Publicarla en internet
 En el plan gratuito de Render el disco es **efímero**: `solicitudes.json` y `solicitudes.xlsx` se pierden al redesplegar o al reiniciar el servicio. Para no perder reservas, monta un disco persistente (plan de pago) en `DATA_DIR` o deja activo el envío a Google Sheets, que vive en la cuenta de Google.

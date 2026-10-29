@@ -28,7 +28,8 @@ function doPost(e) {
       body.lugar || '',
       body.conductor || '',
       body.encargado || '',
-      body.metodoPago || ''
+      body.metodoPago || '',
+      body.premioRuleta || ''
     ]);
     return out({ ok: true });
   } catch (err) {
