@@ -155,9 +155,22 @@
     <div class="sec-h reveal">
       <p class="kicker">La flota</p>
       <h2>Tipos de vehículos</h2>
-      <p class="sub">Tres tipos. Elige uno para ver sus unidades y el precio por día. Los nombres de cada unidad están por completar.</p>
+      <p class="sub">Elige el tipo, la fecha en que lo necesitas y el nombre de quien conduce. Esos datos pasan al formulario de reserva.</p>
     </div>
     <div id="tipos" class="tipo-btns" role="group" aria-label="Tipos de vehículo"></div>
+    <form id="selector" class="selector" novalidate>
+      <p id="tipo-estado" class="elegido" role="status">Selecciona un tipo de vehículo.</p>
+      <div class="row">
+        <label>Fecha en que lo necesitas
+          <input type="date" id="selector-fecha" required>
+          <em id="selector-fecha-err"></em>
+        </label>
+        <label>Nombre de quien va a conducir
+          <input type="text" id="selector-conductor" maxlength="100" autocomplete="name" required placeholder="Nombre y apellido">
+          <em id="selector-conductor-err"></em>
+        </label>
+      </div>
+    </form>
     <div id="flota-wrap" class="flota-wrap" hidden>
       <h3 id="flota-titulo">Unidades</h3>
       <div id="flota" class="vgrid" aria-live="polite"></div>

@@ -165,7 +165,8 @@ footer nav a:hover{text-decoration:underline}
 .fine a{color:#fff;text-underline-offset:2px}
 footer .todo{color:#3d2a00}
 
-.wa{position:fixed;right:16px;bottom:16px;z-index:40;display:flex;align-items:center;gap:8px;background:#128c48;color:#fff;text-decoration:none;font-weight:700;padding:12px 16px;min-height:48px;border-radius:999px;box-shadow:0 8px 22px #0004}
+.wa{position:fixed;right:16px;bottom:16px;z-index:40;display:flex;align-items:center;gap:8px;background:#128c48;color:#fff;text-decoration:none;font-weight:700;padding:14px;min-height:48px;border-radius:50%;box-shadow:0 8px 22px #0004}
+.wa span{display:none}
 .wa:hover{background:#0e753c}
 
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px}
@@ -206,6 +207,8 @@ footer .todo{color:#3d2a00}
 .precio{display:block;margin-top:10px;font-weight:800;color:var(--gold);font-size:1.05rem}
 .rango{display:block;margin-top:2px;color:var(--muted);font-size:14px;font-weight:650}
 .flota-wrap{margin-top:28px}
+.selector{margin-top:22px;background:var(--white);border:1px solid var(--line);border-radius:18px;padding:18px 18px 6px}
+.selector .elegido{margin-top:0}
 .elegido{margin:0 0 8px;font-weight:700;color:var(--navy)}
 #vehiculo-error{color:var(--bad);font-style:normal;font-weight:650;font-size:13px}
 dialog{border:0;padding:0;background:transparent}

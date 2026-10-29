@@ -20,6 +20,7 @@ const form = document.getElementById('form');
 const dlg = document.getElementById('reserva-dialog');
 const hoy = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 form.fechaInicio.min = hoy; form.fechaFin.min = hoy;
+document.getElementById('selector-fecha').min = hoy;
 form.cedula.addEventListener('input', () => { form.cedula.value = form.cedula.value.replace(/\D/g, '').slice(0, 10); });
 
 const dayMs = 86400000;
@@ -30,6 +31,8 @@ function porFechas() {
 }
 form.fechaInicio.addEventListener('change', () => { form.fechaFin.min = form.fechaInicio.value || hoy; porFechas(); });
 form.fechaFin.addEventListener('change', porFechas);
+document.getElementById('selector-fecha').addEventListener('change', () => validarSelector());
+document.getElementById('selector-conductor').addEventListener('blur', () => { if (document.getElementById('selector-conductor').value) validarSelector(); });
 
 let catalogo = { tipos: [], vehiculos: [] };
 let tipoActivo = '';
@@ -81,17 +84,72 @@ function renderTipos() {
     }
     const pick = document.createElement('span');
     pick.className = 'pick';
-    pick.textContent = tipo.id === tipoActivo ? 'Viendo unidades' : 'Ver unidades';
+    pick.textContent = tipo.id === tipoActivo ? 'Seleccionado' : 'Elegir';
     body.append(pick);
+    b.dataset.id = tipo.id;
     b.append(img, body);
     b.addEventListener('click', () => elegirTipo(tipo.id));
     box.append(b);
   });
+  box.onkeydown = (e) => {
+    const buttons = [...box.querySelectorAll('.tcard')];
+    const i = buttons.indexOf(document.activeElement);
+    if (i < 0) return;
+    let next = -1;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (i + 1) % buttons.length;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = (i - 1 + buttons.length) % buttons.length;
+    if (next >= 0) { e.preventDefault(); buttons[next].focus(); buttons[next].click(); }
+  };
+}
+
+function marcarTipo(id) {
+  tipoActivo = id;
+  document.querySelectorAll('#tipos .tcard').forEach((b) => {
+    const on = b.dataset.id === id;
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    const pick = b.querySelector('.pick');
+    if (pick) pick.textContent = on ? 'Seleccionado' : 'Elegir';
+  });
+  const tipo = catalogo.tipos.find((t) => t.id === id);
+  document.getElementById('tipo-estado').textContent = tipo ? `${tipo.nombre} seleccionado.` : 'Selecciona un tipo de vehículo.';
+}
+
+function nombreConductorOk(v) {
+  const n = v.trim().replace(/\s+/g, ' ');
+  return n.split(' ').length >= 2 && n.length >= 5 && n.length <= 100 && /^[\p{L}][\p{L}\s'.-]+$/u.test(n);
+}
+
+function validarSelector() {
+  const fecha = document.getElementById('selector-fecha');
+  const cond = document.getElementById('selector-conductor');
+  const fe = document.getElementById('selector-fecha-err');
+  const ce = document.getElementById('selector-conductor-err');
+  let ok = true;
+  if (!tipoActivo) {
+    document.getElementById('tipo-estado').textContent = 'Selecciona un tipo de vehículo.';
+    ok = false;
+  }
+  if (!fecha.value || fecha.value < hoy) {
+    fe.textContent = 'Selecciona una fecha válida (hoy o posterior).';
+    fecha.closest('label').classList.add('invalid');
+    ok = false;
+  } else {
+    fe.textContent = '';
+    fecha.closest('label').classList.remove('invalid');
+  }
+  if (!nombreConductorOk(cond.value)) {
+    ce.textContent = 'Ingresa el nombre y apellido del conductor.';
+    cond.closest('label').classList.add('invalid');
+    ok = false;
+  } else {
+    ce.textContent = '';
+    cond.closest('label').classList.remove('invalid');
+  }
+  return ok;
 }
 
 function elegirTipo(id) {
-  tipoActivo = id;
-  renderTipos();
+  marcarTipo(id);
   const tipo = catalogo.tipos.find((t) => t.id === id);
   const wrap = document.getElementById('flota-wrap');
   const list = document.getElementById('flota');
@@ -123,11 +181,21 @@ function elegirTipo(id) {
     list.append(b);
   });
   wrap.hidden = false;
-  wrap.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
 }
 
 function abrirReserva(v, tipo, origen) {
+  if (!validarSelector()) {
+    const bad = document.querySelector('#selector .invalid input');
+    if (!tipoActivo) document.querySelector('#tipos .tcard')?.focus();
+    else if (bad) bad.focus();
+    return;
+  }
   form.vehiculoId.value = v.id;
+  form.fechaInicio.value = document.getElementById('selector-fecha').value;
+  form.fechaFin.min = form.fechaInicio.value || hoy;
+  if (form.fechaFin.value && form.fechaFin.value < form.fechaInicio.value) form.fechaFin.value = '';
+  form.conductor.value = document.getElementById('selector-conductor').value.trim().replace(/\s+/g, ' ');
+  porFechas();
   document.getElementById('vehiculo-elegido').textContent = `${tipo.nombre} · ${v.nombre} · ${precioVehiculo(v, tipo)}`;
   document.getElementById('vehiculo-error').textContent = '';
   dlg.dataset.origen = '';
@@ -145,7 +213,7 @@ const reglas = {
   cedula: (v) => cedulaValida(v) || 'Cédula inválida. Debe tener 10 dígitos válidos.',
   telefono: (v) => { v = v.replace(/[\s-]/g, ''); return /^(\+593|0)?9\d{8}$|^(\+593|0)[2-7]\d{7}$/.test(v) || 'Ingresa un teléfono válido (ej. 0991234567).'; },
   correo: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) || 'Ingresa un correo electrónico válido.',
-  conductor: (v) => v.trim().split(/\s+/).length >= 2 && v.trim().length >= 5 || 'Ingresa el nombre y apellido del conductor.',
+  conductor: (v) => nombreConductorOk(v) || 'Ingresa el nombre y apellido del conductor.',
   encargado: (v) => v.trim().split(/\s+/).length >= 2 && v.trim().length >= 5 || 'Ingresa el nombre y apellido de la persona a cargo.',
   dias: (v) => (Number.isInteger(+v) && +v >= 1 && +v <= 365) || 'Ingresa un número de días entre 1 y 365.',
   fechaInicio: (v) => (!!v && v >= hoy) || 'Selecciona una fecha de inicio válida (hoy o posterior).',
