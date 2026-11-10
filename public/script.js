@@ -3,8 +3,7 @@ function enlazarWhatsApp(el) {
   if (!el) return;
   if (/^\d{11,15}$/.test(WHATSAPP_NUMERO)) {
     el.href = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Hola, quisiera información sobre la renta de vehículos.')}`;
-  } else {
-    el.addEventListener('click', (e) => { e.preventDefault(); alert('El número de WhatsApp aún no está configurado.'); });
+    el.hidden = false;
   }
 }
 enlazarWhatsApp(document.getElementById('wa'));
@@ -22,19 +21,21 @@ function cedulaValida(c) {
 
 const form = document.getElementById('form');
 const dlg = document.getElementById('reserva-dialog');
-const hoy = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-form.fechaInicio.min = hoy; form.fechaFin.min = hoy;
-document.getElementById('selector-fecha').min = hoy;
+const fechaLocal = new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/Guayaquil' });
+const hoy = () => fechaLocal.format(new Date());
+form.fechaInicio.min = hoy(); form.fechaFin.min = hoy();
+document.getElementById('selector-fecha').min = hoy();
 form.cedula.addEventListener('input', () => { form.cedula.value = form.cedula.value.replace(/\D/g, '').slice(0, 10); });
 
 const dayMs = 86400000;
 const dt = (s) => new Date(s + 'T00:00:00Z').getTime();
 function porFechas() {
-  if (form.fechaInicio.value && form.fechaFin.value && form.fechaFin.value >= form.fechaInicio.value)
-    form.dias.value = Math.max(1, Math.round((dt(form.fechaFin.value) - dt(form.fechaInicio.value)) / dayMs));
+  const inicio = dt(form.fechaInicio.value);
+  const fin = dt(form.fechaFin.value);
+  form.dias.value = fin >= inicio ? Math.max(1, (fin - inicio) / dayMs) : '';
 }
-form.fechaInicio.addEventListener('change', () => { form.fechaFin.min = form.fechaInicio.value || hoy; porFechas(); });
-form.fechaFin.addEventListener('change', porFechas);
+form.fechaInicio.addEventListener('input', () => { form.fechaFin.min = form.fechaInicio.value || hoy(); porFechas(); });
+form.fechaFin.addEventListener('input', porFechas);
 document.getElementById('selector-fecha').addEventListener('change', () => validarSelector());
 document.getElementById('selector-conductor').addEventListener('blur', () => { if (document.getElementById('selector-conductor').value) validarSelector(); });
 
@@ -79,6 +80,7 @@ function precioVehiculo(v, tipo) {
   if (tipo && tipo.precioDia != null) return `$${tipo.precioDia} / día`;
   return 'Desde $[por definir] / día';
 }
+const nombreTipo = (tipo) => tipo.id === 'camionetas' ? 'Pick-up' : tipo.nombre;
 
 function renderTipos() {
   const box = document.getElementById('tipos');
@@ -94,7 +96,7 @@ function renderTipos() {
     body.className = 'vbody';
     const title = document.createElement('span');
     title.className = 'vtitle';
-    title.textContent = tipo.nombre;
+    title.textContent = nombreTipo(tipo);
     const desc = document.createElement('span');
     desc.className = 'vdesc';
     desc.textContent = tipo.resumen || '';
@@ -141,10 +143,10 @@ function marcarTipo(id) {
     if (pick) pick.textContent = on ? 'Seleccionado' : 'Elegir';
   });
   const tipo = catalogo.tipos.find((t) => t.id === id);
-  document.getElementById('tipo-estado').textContent = tipo ? `${tipo.nombre} seleccionado.` : 'Selecciona un tipo de vehículo.';
+  document.getElementById('tipo-estado').textContent = tipo ? `Categoría seleccionada · ${nombreTipo(tipo)}` : 'Seleccione un tipo de vehículo.';
 }
 
-function nombreConductorOk(v) {
+function nombreCompletoOk(v) {
   const n = v.trim().replace(/\s+/g, ' ');
   return n.split(' ').length >= 2 && n.length >= 5 && n.length <= 100 && /^[\p{L}][\p{L}\s'.-]+$/u.test(n);
 }
@@ -156,19 +158,19 @@ function validarSelector() {
   const ce = document.getElementById('selector-conductor-err');
   let ok = true;
   if (!tipoActivo) {
-    document.getElementById('tipo-estado').textContent = 'Selecciona un tipo de vehículo.';
+    document.getElementById('tipo-estado').textContent = 'Seleccione un tipo de vehículo.';
     ok = false;
   }
-  if (!fecha.value || fecha.value < hoy) {
-    fe.textContent = 'Selecciona una fecha válida (hoy o posterior).';
+  if (!fecha.value || fecha.value < hoy()) {
+    fe.textContent = 'Seleccione una fecha válida (hoy o posterior).';
     fecha.closest('label').classList.add('invalid');
     ok = false;
   } else {
     fe.textContent = '';
     fecha.closest('label').classList.remove('invalid');
   }
-  if (!nombreConductorOk(cond.value)) {
-    ce.textContent = 'Ingresa el nombre y apellido del conductor.';
+  if (!nombreCompletoOk(cond.value)) {
+    ce.textContent = 'Ingrese el nombre y apellido del conductor.';
     cond.closest('label').classList.add('invalid');
     ok = false;
   } else {
@@ -183,7 +185,7 @@ function elegirTipo(id) {
   const tipo = catalogo.tipos.find((t) => t.id === id);
   const wrap = document.getElementById('flota-wrap');
   const list = document.getElementById('flota');
-  document.getElementById('flota-titulo').textContent = tipo ? `Unidades · ${tipo.nombre}` : 'Unidades';
+  document.getElementById('flota-titulo').textContent = tipo ? `Modelos · ${nombreTipo(tipo)}` : 'Modelos';
   list.replaceChildren();
   catalogo.vehiculos.filter((v) => v.tipo === id).forEach((v) => {
     const b = document.createElement('button');
@@ -198,7 +200,8 @@ function elegirTipo(id) {
     title.textContent = v.nombre;
     const specs = document.createElement('span');
     specs.className = 'vdesc';
-    specs.textContent = v.specs || '';
+    if (v.specs && !v.specs.startsWith('[por completar')) specs.textContent = v.specs;
+    specs.hidden = !specs.textContent;
     const price = document.createElement('span');
     price.className = 'precio';
     price.textContent = precioVehiculo(v, tipo);
@@ -239,9 +242,9 @@ function resumenElegido() {
   const tipo = catalogo.tipos.find((t) => t.nombre === form.tipo.value);
   const veh = catalogo.vehiculos.find((v) => v.id === form.vehiculoId.value);
   const el = document.getElementById('vehiculo-elegido');
-  if (veh && tipo) el.textContent = `${tipo.nombre} · ${veh.nombre} · ${precioVehiculo(veh, tipo)}`;
-  else if (tipo) el.textContent = tipo.nombre;
-  else el.textContent = 'Completa tu reserva.';
+  if (veh && tipo) el.textContent = `${nombreTipo(tipo)} · ${veh.nombre} · ${precioVehiculo(veh, tipo)}`;
+  else if (tipo) el.textContent = nombreTipo(tipo);
+  else el.textContent = 'Seleccione una categoría para continuar.';
 }
 function abrirFormulario(opts = {}) {
   const tipoNombre = opts.tipo || catalogo.tipos.find((t) => t.id === tipoActivo)?.nombre || form.tipo.value;
@@ -249,11 +252,12 @@ function abrirFormulario(opts = {}) {
   llenarUnidades(form.tipo.value, opts.vehiculoId || '');
   const fechaSel = document.getElementById('selector-fecha').value;
   if (opts.fechaInicio || (!form.fechaInicio.value && fechaSel)) form.fechaInicio.value = opts.fechaInicio || fechaSel;
-  form.fechaFin.min = form.fechaInicio.value || hoy;
+  form.fechaInicio.min = hoy();
+  form.fechaFin.min = form.fechaInicio.value || hoy();
   if (form.fechaFin.value && form.fechaFin.value < form.fechaInicio.value) form.fechaFin.value = '';
   const cond = document.getElementById('selector-conductor').value.trim().replace(/\s+/g, ' ');
   if (opts.conductor) form.conductor.value = opts.conductor;
-  else if (!form.conductor.value && nombreConductorOk(cond)) form.conductor.value = cond;
+  else if (!form.conductor.value && nombreCompletoOk(cond)) form.conductor.value = cond;
   porFechas();
   resumenElegido();
   const nav = document.getElementById('site-nav');
@@ -285,25 +289,25 @@ document.getElementById('cerrar-reserva').addEventListener('click', () => dlg.cl
 dlg.addEventListener('close', () => { if (dlg._origen) dlg._origen.focus(); });
 
 const reglas = {
-  tipo: (v) => !!v || 'Selecciona un tipo de vehículo.',
+  tipo: (v) => !!v || 'Seleccione un tipo de vehículo.',
   vehiculoId: (v) => {
     if (!v) return true;
     const tipo = catalogo.tipos.find((t) => t.nombre === form.tipo.value);
     const veh = catalogo.vehiculos.find((x) => x.id === v);
     return !!(tipo && veh && veh.tipo === tipo.id) || 'El vehículo no corresponde al tipo elegido.';
   },
-  nombre: (v) => v.trim().split(/\s+/).length >= 2 && v.trim().length >= 5 || 'Ingresa tu nombre y apellido completos.',
+  nombre: (v) => nombreCompletoOk(v) || 'Ingrese su nombre y apellido completos.',
   cedula: (v) => cedulaValida(v) || 'Cédula inválida. Debe tener 10 dígitos válidos.',
-  telefono: (v) => { v = v.replace(/[\s-]/g, ''); return /^(\+593|0)?9\d{8}$|^(\+593|0)[2-7]\d{7}$/.test(v) || 'Ingresa un teléfono válido (ej. 0991234567).'; },
-  correo: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) || 'Ingresa un correo electrónico válido.',
-  conductor: (v) => nombreConductorOk(v) || 'Ingresa el nombre y apellido del conductor.',
-  encargado: (v) => v.trim().split(/\s+/).length >= 2 && v.trim().length >= 5 || 'Ingresa el nombre y apellido de la persona a cargo.',
-  dias: (v) => (Number.isInteger(+v) && +v >= 1 && +v <= 365) || 'Ingresa un número de días entre 1 y 365.',
-  fechaInicio: (v) => (!!v && v >= hoy) || 'Selecciona una fecha de inicio válida (hoy o posterior).',
+  telefono: (v) => { v = v.replace(/[\s-]/g, ''); return /^(\+593|0)?9\d{8}$|^(\+593|0)[2-7]\d{7}$/.test(v) || 'Ingrese un teléfono válido (ej. 0991234567).'; },
+  correo: (v) => v.trim().length <= 120 && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) || 'Ingrese un correo electrónico válido.',
+  conductor: (v) => nombreCompletoOk(v) || 'Ingrese el nombre y apellido del conductor.',
+  encargado: (v) => nombreCompletoOk(v) || 'Ingrese el nombre y apellido de la persona a cargo.',
+  dias: (v) => +v <= 365 || 'La renta no puede superar 365 días.',
+  fechaInicio: (v) => (!!v && v >= hoy()) || 'Seleccione una fecha de inicio válida (hoy o posterior).',
   fechaFin: (v) => (!!v && v >= form.fechaInicio.value) || 'La fecha de fin debe ser igual o posterior al inicio.',
-  ubicacion: (v) => v.trim().length >= 2 || 'Indica tu ciudad o ubicación.',
-  lugar: (v) => v.trim().length >= 3 || 'Indica el lugar de entrega del vehículo.',
-  metodoPago: (v) => !!v || 'Selecciona un método de pago.',
+  ubicacion: (v) => v.trim().length >= 2 || 'Indique su ciudad o ubicación.',
+  lugar: (v) => v.trim().length >= 3 || 'Indique el lugar de entrega del vehículo.',
+  metodoPago: (v) => !!v || 'Seleccione un método de pago.',
 };
 function mostrar(name, msg) {
   if (name === 'consentimiento') { form.querySelector('.cerr').textContent = msg || ''; return; }
@@ -317,12 +321,14 @@ Object.keys(reglas).forEach((n) => { if (form[n]) form[n].addEventListener('blur
 
 form.addEventListener('submit', async (ev) => {
   ev.preventDefault();
+  const btn = document.getElementById('enviar');
+  if (btn.disabled) return;
+  porFechas();
   const ok = document.getElementById('ok'), err = document.getElementById('err');
   ok.hidden = err.hidden = true;
   let valido = Object.keys(reglas).map(check).every(Boolean);
-  if (!form.consentimiento.checked) { mostrar('consentimiento', 'Debes aceptar el tratamiento de tus datos.'); valido = false; } else mostrar('consentimiento', '');
+  if (!form.consentimiento.checked) { mostrar('consentimiento', 'Autorice el tratamiento de sus datos para continuar.'); valido = false; } else mostrar('consentimiento', '');
   if (!valido) { const f = form.querySelector('.invalid input,.invalid select'); if (f) f.focus(); return; }
-  const btn = document.getElementById('enviar');
   btn.disabled = true; btn.textContent = 'Enviando…';
   const data = Object.fromEntries(Object.keys(reglas).map((n) => [n, form[n].value]));
   data.consentimiento = true;
@@ -332,16 +338,16 @@ form.addEventListener('submit', async (ev) => {
     const j = await r.json();
     if (r.ok && j.ok) {
       form.reset();
-      form.fechaInicio.min = hoy; form.fechaFin.min = hoy;
+      form.fechaInicio.min = hoy(); form.fechaFin.min = hoy();
       llenarUnidades('', '');
       document.getElementById('vehiculo-elegido').textContent = 'Solicitud registrada.';
-      ok.textContent = `¡Gracias! Recibimos tu solicitud (N.º ${j.id}). Nos pondremos en contacto contigo pronto.`;
+      ok.textContent = `Solicitud N.º ${j.id} recibida. Nuestro equipo se comunicará con usted.`;
       ok.hidden = false;
     } else {
       Object.entries(j.errores || {}).forEach(([k, m]) => (k === '_' ? (err.textContent = m, err.hidden = false) : mostrar(k, m)));
-      if (!Object.keys(j.errores || {}).length) { err.textContent = 'No se pudo enviar. Intenta de nuevo.'; err.hidden = false; }
+      if (!Object.keys(j.errores || {}).length) { err.textContent = 'No fue posible enviar la solicitud. Intente nuevamente.'; err.hidden = false; }
     }
-  } catch (_) { err.textContent = 'Error de conexión. Intenta de nuevo.'; err.hidden = false; }
+  } catch (_) { err.textContent = 'Error de conexión. Intente nuevamente.'; err.hidden = false; }
   btn.disabled = false; btn.textContent = 'Enviar solicitud';
 });
 

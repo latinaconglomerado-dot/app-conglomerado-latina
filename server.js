@@ -21,7 +21,14 @@ const DB_FILE = path.join(DATA_DIR, 'solicitudes.json');
 fs.mkdirSync(DATA_DIR, { recursive: true });
 
 function leer() {
-  try { return JSON.parse(fs.readFileSync(DB_FILE, 'utf8')); } catch (_) { return []; }
+  try {
+    const rows = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+    if (!Array.isArray(rows)) throw new Error('El archivo de solicitudes debe contener una lista.');
+    return rows;
+  } catch (err) {
+    if (err.code === 'ENOENT') return [];
+    throw err;
+  }
 }
 function guardar(rows) {
   const tmp = DB_FILE + '.tmp';
@@ -66,14 +73,14 @@ function filaExport(r) {
     r.ubicacion ?? '',
   ];
 }
-async function escribirExcel(rows) {
+function generarExcel(rows) {
   const wb = new ExcelJS.Workbook();
   const sheet = wb.addWorksheet('Solicitudes');
   sheet.addRow(ENCABEZADOS);
   sheet.getRow(1).font = { bold: true };
   rows.forEach((r) => sheet.addRow(filaExport(r)));
   sheet.columns.forEach((c) => { c.width = 22; });
-  await wb.xlsx.writeFile(XLSX_FILE);
+  return wb.xlsx.writeBuffer();
 }
 function notificarHoja(reg) {
   const url = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
@@ -106,7 +113,9 @@ function notificarHoja(reg) {
     body: JSON.stringify(body),
     signal: ctrl.signal,
   }).then(async (r) => {
-    if (!r.ok) console.error('Google Sheets webhook', r.status);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const result = await r.json();
+    if (result.ok !== true) throw new Error('La hoja rechazó la solicitud.');
   }).catch((err) => {
     console.error('Google Sheets webhook', err.message);
   }).finally(() => clearTimeout(timer));
@@ -130,8 +139,14 @@ function limitar(req, res, next) {
   arr.push(now); hits.set(k, arr); next();
 }
 
-const hoy = () => new Date().toISOString().slice(0, 10);
-const esFecha = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(new Date(s + 'T00:00:00Z'));
+const fechaLocal = new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/Guayaquil' });
+const hoy = () => fechaLocal.format(new Date());
+function fechaUtc(s) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return NaN;
+  const fecha = new Date(s + 'T00:00:00Z');
+  const ms = fecha.getTime();
+  return Number.isFinite(ms) && fecha.toISOString().slice(0, 10) === s ? ms : NaN;
+}
 
 function validar(b) {
   const e = {}, d = {};
@@ -170,18 +185,13 @@ function validar(b) {
     d.precio = precioDe(tipo, {});
   }
   d.fechaInicio = t('fechaInicio'); d.fechaFin = t('fechaFin');
-  if (!esFecha(d.fechaInicio) || d.fechaInicio < hoy()) e.fechaInicio = 'Selecciona una fecha de inicio válida (hoy o posterior).';
-  if (!esFecha(d.fechaFin) || (esFecha(d.fechaInicio) && d.fechaFin < d.fechaInicio)) e.fechaFin = 'La fecha de fin debe ser igual o posterior al inicio.';
-  const diasEnviados = parseInt(b.dias, 10);
-  const diasOk = Number.isInteger(diasEnviados) && diasEnviados >= 1 && diasEnviados <= 365;
+  const inicio = fechaUtc(d.fechaInicio);
+  const fin = fechaUtc(d.fechaFin);
+  if (Number.isNaN(inicio) || d.fechaInicio < hoy()) e.fechaInicio = 'Seleccione una fecha de inicio válida (hoy o posterior).';
+  if (Number.isNaN(fin) || fin < inicio) e.fechaFin = 'La fecha de fin debe ser igual o posterior a la de inicio.';
   if (!e.fechaInicio && !e.fechaFin) {
-    const diff = Math.round((Date.parse(d.fechaFin + 'T00:00:00Z') - Date.parse(d.fechaInicio + 'T00:00:00Z')) / 86400000);
-    const calculados = Math.max(1, diff);
-    d.dias = diasOk ? diasEnviados : calculados;
+    d.dias = Math.max(1, (fin - inicio) / 86400000);
     if (d.dias > 365) e.dias = 'La renta no puede superar 365 días.';
-  } else {
-    d.dias = diasEnviados;
-    if (!diasOk) e.dias = 'Ingresa un número de días entre 1 y 365.';
   }
   d.ubicacion = t('ubicacion');
   if (d.ubicacion.length < 2 || d.ubicacion.length > 120) e.ubicacion = 'Indica tu ciudad o ubicación.';
@@ -200,23 +210,36 @@ app.post('/api/ruleta', (_req, res) => {
   res.json({ ok: true, indice, premio: PREMIOS_RULETA[indice] });
 });
 
-app.post('/api/solicitudes', limitar, async (req, res) => {
-  const { e, d } = validar(req.body || {});
-  if (Object.keys(e).length) return res.status(400).json({ ok: false, errores: e });
+async function registrarSolicitud(d) {
   const rows = leer();
   const reg = { id: rows.length ? rows[rows.length - 1].id + 1 : 1, creado: new Date().toISOString(), ...d, consentimiento: true };
   rows.push(reg);
   guardar(rows);
+  // El JSON es la fuente de datos. El Excel se puede regenerar desde el panel.
   try {
-    await escribirExcel(rows);
+    const tmp = XLSX_FILE + '.tmp';
+    fs.writeFileSync(tmp, await generarExcel(rows));
+    fs.renameSync(tmp, XLSX_FILE);
   } catch (err) {
     console.error('Excel', err);
-    rows.pop();
-    guardar(rows);
-    return res.status(500).json({ ok: false, errores: { _: 'No se pudo guardar la solicitud. Intenta de nuevo.' } });
   }
-  res.status(201).json({ ok: true, id: reg.id });
-  notificarHoja(reg);
+  return reg;
+}
+
+let colaSolicitudes = Promise.resolve();
+app.post('/api/solicitudes', limitar, async (req, res) => {
+  try {
+    const { e, d } = validar(req.body || {});
+    if (Object.keys(e).length) return res.status(400).json({ ok: false, errores: e });
+    const guardado = colaSolicitudes.then(() => registrarSolicitud(d));
+    colaSolicitudes = guardado.catch(() => {});
+    const reg = await guardado;
+    res.status(201).json({ ok: true, id: reg.id });
+    notificarHoja(reg);
+  } catch (err) {
+    console.error('Solicitudes', err);
+    res.status(500).json({ ok: false, errores: { _: 'No fue posible guardar la solicitud. Intente nuevamente.' } });
+  }
 });
 
 // ---- Admin (HTTP Basic) ----
@@ -261,9 +284,8 @@ app.get('/admin/export.csv', auth, (req, res) => {
 
 app.get('/admin/export.xlsx', auth, async (req, res) => {
   try {
-    const rows = leer();
-    await escribirExcel(rows);
-    res.download(XLSX_FILE, 'solicitudes.xlsx');
+    const excel = await generarExcel(leer());
+    res.attachment('solicitudes.xlsx').send(Buffer.from(excel));
   } catch (err) {
     console.error('Excel', err);
     res.status(500).send('No se pudo generar el Excel');

@@ -1,6 +1,6 @@
 # Renta Car Ecuador
 
-App web en español (Ecuador): página de renta, elección de vehículo y formulario de reserva. Stack: Node.js (≥18) + Express. Cada solicitud se guarda en JSON y en un Excel dentro de `DATA_DIR`. Si configuras el webhook, también se agrega una fila a Google Sheets.
+App web en español (Ecuador) para consultar la flota y solicitar una reserva. Usa Node.js (≥18) y Express. Las solicitudes se guardan en JSON dentro de `DATA_DIR`. El archivo Excel local se actualiza después de cada registro y el panel permite exportarlo directamente a partir del JSON. Si configuras el webhook, también se envía una fila a Google Sheets.
 
 ## Ejecutar localmente
 ```bash
@@ -98,9 +98,9 @@ Manual:
 El hero y `public/og.jpg` siguen siendo fotografías ilustrativas de Unsplash. La flota y la galería de entregas usan las imágenes de marketing en WebP; llevan el logo y «Imagen referencial» en la propia foto, y el sitio repite esa leyenda. Las láminas de contacto no se publican.
 
 ## Personalización pendiente
-- **WhatsApp**: `WHATSAPP_NUMERO` en `public/script.js` (formato `593XXXXXXXXX`).
-- Textos `[por completar]` (dirección, horario, teléfono, condiciones del 10%, política de privacidad, ficha técnica de cada unidad).
-- Colores en `:root` de `public/styles.css` (carbón `#1b1e23`, carmesí `#9f1239`, papel `#f7f4f0`).
+- Configure `WHATSAPP_NUMERO` en `public/script.js` (formato `593XXXXXXXXX`) para mostrar los enlaces de WhatsApp.
+- Quedan por incorporar la información de contacto, las condiciones del 10 %, el enlace a la política de privacidad y la ficha técnica de cada unidad.
+- Colores en `:root` de `public/styles.css` (azul marino `#172536`, burdeos `#831d3d` y gris claro `#f3f5f7`).
 
 ## Seguridad / privacidad
 - No se piden números de tarjeta; solo el método de pago preferido.
