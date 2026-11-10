@@ -20,7 +20,7 @@ npm start                # http://localhost:3000
 | `PORT` | Puerto (por defecto 3000; las plataformas lo inyectan). |
 | `DATA_DIR` | Carpeta de datos (por defecto `./data`). Ahí viven `solicitudes.json` y `solicitudes.xlsx`. |
 | `GOOGLE_SHEETS_WEBHOOK_URL` | URL del Web App de Apps Script. Si está vacía, no se envía nada a Sheets. |
-| `GOOGLE_SHEETS_TOKEN` | Secreto compartido con `TOKEN` en `google-apps-script/Code.gs`. |
+| `GOOGLE_SHEETS_TOKEN` | Secreto compartido con la propiedad del mismo nombre en Apps Script. |
 
 ## Confianza
 Tres archivos, sin cifras ni nombres inventados:
@@ -53,7 +53,7 @@ La hoja ya existe (id `1s_uKwkZUrm7KUX_lQ6FH47KZ4lNG-s5VlBKUU8NyWRc`, pestaña `
 1. Abre la hoja de cálculo.
 2. Menú **Extensiones → Apps Script**.
 3. Borra el código de ejemplo y pega el archivo `google-apps-script/Code.gs` de este repositorio.
-4. En la constante `TOKEN`, pon una clave larga. Tiene que ser **la misma** que `GOOGLE_SHEETS_TOKEN` en Render.
+4. En **Configuración del proyecto → Propiedades de la secuencia de comandos**, guarda una clave larga con el nombre `GOOGLE_SHEETS_TOKEN`. Tiene que ser **la misma** que en Render.
 5. **Implementar → Nueva implementación → Tipo: Aplicación web**.
 6. **Ejecutar como:** Yo · **Quién tiene acceso:** Cualquier persona. Implementar y autorizar.
 7. Copia la URL de la aplicación web (`/exec`, no `/dev`).

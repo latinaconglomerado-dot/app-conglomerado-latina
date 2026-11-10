@@ -109,8 +109,9 @@
     <div>
       <p class="kicker">La empresa</p>
       <h2>Quiénes somos</h2>
-      <p><strong>Renta Car Ecuador</strong> lleva cuatro años en el mercado de la renta de vehículos. Operamos a nivel nacional en Ecuador, con presencia en Quito, Guayaquil, Cuenca y Machala.</p>
-      <p>Indique su ciudad y las fechas de renta. Nuestro equipo se comunicará con usted para coordinar la reserva.</p>
+      <p><strong>Renta Car Ecuador</strong> ofrece alquiler de vehículos para viajes de trabajo, vacaciones y traslados personales. Llevamos cuatro años en el mercado y atendemos a nivel nacional, con presencia en Quito, Guayaquil, Cuenca y Machala.</p>
+      <p>La elección depende del viaje. Un sedán es práctico para moverse por la ciudad, una SUV ofrece más espacio para pasajeros y equipaje, y una pick-up es una opción para quienes necesitan transportar herramientas o carga.</p>
+      <p>En nuestra web puede consultar las tarifas por día y solicitar una reserva con sus fechas y el lugar donde desea recibir el vehículo. Nuestro equipo se comunica con usted para confirmar la disponibilidad, coordinar la entrega y acordar la forma de pago.</p>
     </div>
     <ul class="facts">
       <li><b>En el mercado</b><span>4 años</span></li>
@@ -175,7 +176,7 @@
     <div class="sec-h reveal">
       <p class="kicker">La flota</p>
       <h2>Flota y tarifas</h2>
-      <p class="sub">Compare sedanes, SUV y pick-ups. Seleccione una categoría e indique la fecha de inicio y el nombre del conductor.</p>
+      <p class="sub">Compare sedanes, SUV y pick-ups. Seleccione una categoría e indique la fecha de inicio, el nombre del conductor y su teléfono de contacto.</p>
     </div>
     <div id="tipos" class="tipo-btns" role="group" aria-label="Tipos de vehículo"></div>
     <form id="selector" class="selector" novalidate>
@@ -188,6 +189,10 @@
         <label>Nombre del conductor
           <input type="text" id="selector-conductor" maxlength="100" autocomplete="name" required placeholder="Nombre y apellido">
           <em id="selector-conductor-err"></em>
+        </label>
+        <label>Teléfono / WhatsApp
+          <input type="tel" id="selector-telefono" maxlength="20" autocomplete="tel" required placeholder="Ej. 0991234567" aria-describedby="selector-telefono-err">
+          <em id="selector-telefono-err" aria-live="polite"></em>
         </label>
       </div>
     </form>

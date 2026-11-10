@@ -21,6 +21,7 @@ function cedulaValida(c) {
 
 const form = document.getElementById('form');
 const dlg = document.getElementById('reserva-dialog');
+const telefonoSelector = document.getElementById('selector-telefono');
 const fechaLocal = new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/Guayaquil' });
 const hoy = () => fechaLocal.format(new Date());
 form.fechaInicio.min = hoy(); form.fechaFin.min = hoy();
@@ -38,6 +39,10 @@ form.fechaInicio.addEventListener('input', () => { form.fechaFin.min = form.fech
 form.fechaFin.addEventListener('input', porFechas);
 document.getElementById('selector-fecha').addEventListener('change', () => validarSelector());
 document.getElementById('selector-conductor').addEventListener('blur', () => { if (document.getElementById('selector-conductor').value) validarSelector(); });
+telefonoSelector.addEventListener('blur', () => { if (telefonoSelector.value) validarTelefonoSelector(); });
+telefonoSelector.addEventListener('input', () => {
+  if (telefonoSelector.getAttribute('aria-invalid') === 'true') validarTelefonoSelector();
+});
 
 let catalogo = { tipos: [], vehiculos: [] };
 let tipoActivo = '';
@@ -151,6 +156,19 @@ function nombreCompletoOk(v) {
   return n.split(' ').length >= 2 && n.length >= 5 && n.length <= 100 && /^[\p{L}][\p{L}\s'.-]+$/u.test(n);
 }
 
+function telefonoValido(valor) {
+  return /^(\+593|0)?9\d{8}$|^(\+593|0)[2-7]\d{7}$/.test(valor.trim().replace(/[\s-]/g, ''));
+}
+
+const errorTelefono = 'Ingrese un teléfono válido (ej. 0991234567).';
+function validarTelefonoSelector() {
+  const valido = telefonoValido(telefonoSelector.value);
+  telefonoSelector.setAttribute('aria-invalid', String(!valido));
+  telefonoSelector.closest('label').classList.toggle('invalid', !valido);
+  document.getElementById('selector-telefono-err').textContent = valido ? '' : errorTelefono;
+  return valido;
+}
+
 function validarSelector() {
   const fecha = document.getElementById('selector-fecha');
   const cond = document.getElementById('selector-conductor');
@@ -258,6 +276,9 @@ function abrirFormulario(opts = {}) {
   const cond = document.getElementById('selector-conductor').value.trim().replace(/\s+/g, ' ');
   if (opts.conductor) form.conductor.value = opts.conductor;
   else if (!form.conductor.value && nombreCompletoOk(cond)) form.conductor.value = cond;
+  const telefono = telefonoSelector.value.trim();
+  if (opts.telefono) form.telefono.value = opts.telefono;
+  else if (!form.telefono.value && telefonoValido(telefono)) form.telefono.value = telefono;
   porFechas();
   resumenElegido();
   const nav = document.getElementById('site-nav');
@@ -267,7 +288,9 @@ function abrirFormulario(opts = {}) {
   (form.tipo.value ? form.nombre : form.tipo).focus();
 }
 function abrirReserva(v, tipo, origen) {
-  if (!validarSelector()) {
+  const selectorValido = validarSelector();
+  const telefonoCorrecto = validarTelefonoSelector();
+  if (!selectorValido || !telefonoCorrecto) {
     const bad = document.querySelector('#selector .invalid input');
     if (!tipoActivo) document.querySelector('#tipos .tcard')?.focus();
     else if (bad) bad.focus();
@@ -278,6 +301,7 @@ function abrirReserva(v, tipo, origen) {
     vehiculoId: v.id,
     fechaInicio: document.getElementById('selector-fecha').value,
     conductor: document.getElementById('selector-conductor').value.trim().replace(/\s+/g, ' '),
+    telefono: telefonoSelector.value.trim(),
     origen,
   });
 }
@@ -298,7 +322,7 @@ const reglas = {
   },
   nombre: (v) => nombreCompletoOk(v) || 'Ingrese su nombre y apellido completos.',
   cedula: (v) => cedulaValida(v) || 'Cédula inválida. Debe tener 10 dígitos válidos.',
-  telefono: (v) => { v = v.replace(/[\s-]/g, ''); return /^(\+593|0)?9\d{8}$|^(\+593|0)[2-7]\d{7}$/.test(v) || 'Ingrese un teléfono válido (ej. 0991234567).'; },
+  telefono: (v) => telefonoValido(v) || errorTelefono,
   correo: (v) => v.trim().length <= 120 && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) || 'Ingrese un correo electrónico válido.',
   conductor: (v) => nombreCompletoOk(v) || 'Ingrese el nombre y apellido del conductor.',
   encargado: (v) => nombreCompletoOk(v) || 'Ingrese el nombre y apellido de la persona a cargo.',

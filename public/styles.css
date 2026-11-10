@@ -239,6 +239,9 @@ dialog::backdrop{background:#1b1e23cc}
 .light{width:min(960px,calc(100vw - 24px));background:var(--white);border-radius:18px;padding:16px}
 .light img{width:100%;height:auto;border-radius:12px}
 @media(min-width:720px){.tipo-btns{grid-template-columns:repeat(3,1fr)}.galeria{grid-template-columns:1fr 1fr}}
+@media(min-width:720px){.selector .row{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.selector em{display:block;color:var(--bad);font-style:normal;font-size:13px}
+.selector em:empty{display:none}
 @media(min-width:980px){.galeria{grid-template-columns:repeat(3,1fr)}}
 #flota{grid-template-columns:1fr}
 @media(min-width:720px){#flota{grid-template-columns:repeat(2,1fr)}}
