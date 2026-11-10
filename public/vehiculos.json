@@ -5,7 +5,7 @@
       "id": "sedan",
       "nombre": "Sedán",
       "resumen": "Cómodo y eficiente para ciudad y carretera.",
-      "imagen": "images/flota/sedan-01",
+      "imagen": "images/categorias/sedan",
       "precioDia": 55,
       "precioDesde": null,
       "precioHasta": null
@@ -14,7 +14,7 @@
       "id": "suv",
       "nombre": "SUV",
       "resumen": "Espacio y altura para viajes en familia y rutas variadas.",
-      "imagen": "images/flota/suv-01",
+      "imagen": "images/categorias/suv",
       "precioDia": null,
       "precioDesde": 60,
       "precioHasta": 85
@@ -23,7 +23,7 @@
       "id": "camionetas",
       "nombre": "Camionetas",
       "resumen": "Para carga, trabajo y terrenos exigentes.",
-      "imagen": "images/flota/pickup-01",
+      "imagen": "images/categorias/pickup",
       "precioDia": 90,
       "precioDesde": null,
       "precioHasta": null

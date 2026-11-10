@@ -1,11 +1,11 @@
 {
   "nota": "Fotos en public/images/entregas/, en WebP a 800 y 1600 px. El campo imagen es la ruta sin sufijo (se sirven imagen-800.webp e imagen-1600.webp). Mientras referencial sea true, el sitio muestra «Imagen referencial» y no presenta la foto como un cliente real.",
   "items": [
-    { "id": "entrega-1", "titulo": "[por completar: descripción de la entrega]", "imagen": "images/entregas/entrega-01", "referencial": true },
-    { "id": "entrega-2", "titulo": "[por completar: descripción de la entrega]", "imagen": "images/entregas/entrega-02", "referencial": true },
-    { "id": "entrega-3", "titulo": "[por completar: descripción de la entrega]", "imagen": "images/entregas/entrega-03", "referencial": true },
-    { "id": "entrega-4", "titulo": "[por completar: descripción de la entrega]", "imagen": "images/entregas/entrega-04", "referencial": true },
-    { "id": "entrega-5", "titulo": "[por completar: descripción de la entrega]", "imagen": "images/entregas/entrega-05", "referencial": true },
-    { "id": "entrega-6", "titulo": "[por completar: descripción de la entrega]", "imagen": "images/entregas/entrega-06", "referencial": true }
+    { "id": "entrega-1", "titulo": "Entrega de llaves de un sedán en una calle del centro histórico", "imagen": "images/entregas/entrega-01", "referencial": true },
+    { "id": "entrega-2", "titulo": "Revisión exterior de una SUV antes de la entrega", "imagen": "images/entregas/entrega-02", "referencial": true },
+    { "id": "entrega-3", "titulo": "Revisión de la documentación junto al vehículo", "imagen": "images/entregas/entrega-03", "referencial": true },
+    { "id": "entrega-4", "titulo": "Una familia acomoda su equipaje en una SUV", "imagen": "images/entregas/entrega-04", "referencial": true },
+    { "id": "entrega-5", "titulo": "Entrega de llaves de una pick-up de doble cabina", "imagen": "images/entregas/entrega-05", "referencial": true },
+    { "id": "entrega-6", "titulo": "Sedán en un mirador con vista a la ciudad", "imagen": "images/entregas/entrega-06", "referencial": true }
   ]
 }
