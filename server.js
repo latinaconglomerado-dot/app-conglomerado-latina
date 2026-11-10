@@ -102,8 +102,6 @@ function notificarHoja(reg) {
     fechaFin: reg.fechaFin,
     dias: reg.dias,
     lugar: reg.lugar,
-    conductor: reg.conductor,
-    encargado: reg.encargado,
     metodoPago: reg.metodoPago,
     premioRuleta: reg.premioRuleta || '',
     ubicacion: reg.ubicacion || '',
@@ -161,12 +159,6 @@ function validar(b) {
   if (!/^(\+593|0)?9\d{8}$|^(\+593|0)[2-7]\d{7}$/.test(d.telefono)) e.telefono = 'Ingresa un teléfono válido (ej. 0991234567).';
   d.correo = t('correo').toLowerCase();
   if (d.correo.length > 120 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.correo)) e.correo = 'Ingresa un correo electrónico válido.';
-  d.conductor = t('conductor').replace(/\s+/g, ' ');
-  if (d.conductor.length < 5 || d.conductor.length > 100 || !/^[\p{L}][\p{L}\s'.-]+$/u.test(d.conductor) || d.conductor.split(' ').length < 2)
-    e.conductor = 'Ingresa el nombre y apellido del conductor.';
-  d.encargado = t('encargado').replace(/\s+/g, ' ');
-  if (d.encargado.length < 5 || d.encargado.length > 100 || !/^[\p{L}][\p{L}\s'.-]+$/u.test(d.encargado) || d.encargado.split(' ').length < 2)
-    e.encargado = 'Ingresa el nombre y apellido de la persona a cargo.';
   const cat = catalogo();
   const tipo = (cat.tipos || []).find((tp) => tp.nombre === t('tipo'));
   if (!tipo) e.tipo = 'Selecciona un tipo de vehículo.';

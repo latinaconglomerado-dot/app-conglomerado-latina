@@ -255,8 +255,6 @@ const reglas = {
   cedula: (v) => cedulaValida(v) || 'Cédula inválida. Debe tener 10 dígitos válidos.',
   telefono: (v) => telefonoValido(v) || errorTelefono,
   correo: (v) => v.trim().length <= 120 && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) || 'Ingrese un correo electrónico válido.',
-  conductor: (v) => nombreCompletoOk(v) || 'Ingrese el nombre y apellido del conductor.',
-  encargado: (v) => nombreCompletoOk(v) || 'Ingrese el nombre y apellido de la persona a cargo.',
   dias: (v) => +v <= 365 || 'La renta no puede superar 365 días.',
   fechaInicio: (v) => (!!v && v >= hoy()) || 'Seleccione una fecha de inicio válida (hoy o posterior).',
   fechaFin: (v) => (!!v && v >= form.fechaInicio.value) || 'La fecha de fin debe ser igual o posterior al inicio.',
