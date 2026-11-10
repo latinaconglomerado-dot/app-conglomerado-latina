@@ -47,6 +47,7 @@ function catalogo() {
 }
 function precioDe(tipo, vehiculo) {
   if (vehiculo && vehiculo.precioDia != null) return `$${vehiculo.precioDia} / día`;
+  if (vehiculo?.precioDesde != null && vehiculo.precioHasta != null) return `$${vehiculo.precioDesde}–$${vehiculo.precioHasta} / día`;
   if (tipo && tipo.precioDesde != null && tipo.precioHasta != null) return `$${tipo.precioDesde}–$${tipo.precioHasta} / día`;
   if (tipo && tipo.precioDia != null) return `$${tipo.precioDia} / día`;
   return 'Desde $[por definir] / día';

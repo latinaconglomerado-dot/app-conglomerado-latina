@@ -52,15 +52,17 @@ function setFoto(img, base, sizes) {
   img.decoding = 'async';
 }
 function setFotoModelo(img, vehiculo, sizes) {
-  setFoto(img, vehiculo.imagenReferencia, sizes);
-  if (!vehiculo.imagen) return;
-  const prueba = new Image();
-  prueba.onload = () => {
-    img.removeAttribute('srcset');
-    img.sizes = '';
-    img.src = vehiculo.imagen;
-  };
-  prueba.src = vehiculo.imagen;
+  if (!vehiculo.imagen) {
+    setFoto(img, vehiculo.imagenReferencia, sizes);
+    return;
+  }
+  img.width = 900;
+  img.height = 600;
+  img.alt = '';
+  img.loading = 'lazy';
+  img.decoding = 'async';
+  img.addEventListener('error', () => setFoto(img, vehiculo.imagenReferencia, sizes), { once: true });
+  img.src = vehiculo.imagen;
 }
 function precioTipo(tipo) {
   if (tipo.precioDia != null) return `$${tipo.precioDia} / día`;
@@ -73,6 +75,7 @@ function rangoTipo(tipo) {
 }
 function precioVehiculo(v, tipo) {
   if (v.precioDia != null) return `$${v.precioDia} / día`;
+  if (v.precioDesde != null && v.precioHasta != null) return `$${v.precioDesde}–$${v.precioHasta} / día`;
   if (tipo && tipo.precioDesde != null && tipo.precioHasta != null) return `$${tipo.precioDesde}–$${tipo.precioHasta} / día`;
   if (tipo && tipo.precioDia != null) return `$${tipo.precioDia} / día`;
   return 'Desde $[por definir] / día';
@@ -182,7 +185,7 @@ function elegirTipo(id) {
     pick.textContent = 'Elegir';
     const ref = document.createElement('span');
     ref.className = 'cap';
-    ref.textContent = 'Imagen referencial';
+    ref.textContent = v.imagenLeyenda || 'Imagen referencial';
     body.append(title, specs, price, pick, ref);
     b.append(img, body);
     b.addEventListener('click', () => abrirFormulario({ tipo: tipo.nombre, vehiculoId: v.id, origen: b }));
