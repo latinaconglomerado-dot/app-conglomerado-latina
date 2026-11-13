@@ -114,10 +114,7 @@ function renderTipos() {
     const pick = document.createElement('span');
     pick.className = 'pick';
     pick.textContent = tipo.id === tipoActivo ? 'Seleccionado' : 'Elegir';
-    const ref = document.createElement('span');
-    ref.className = 'cap';
-    ref.textContent = 'Imagen referencial';
-    body.append(pick, ref);
+    body.append(pick);
     b.dataset.id = tipo.id;
     b.append(img, body);
     b.addEventListener('click', () => elegirTipo(tipo.id));
@@ -183,10 +180,7 @@ function elegirTipo(id) {
     const pick = document.createElement('span');
     pick.className = 'pick';
     pick.textContent = 'Elegir';
-    const ref = document.createElement('span');
-    ref.className = 'cap';
-    ref.textContent = v.imagenLeyenda || 'Imagen referencial';
-    body.append(title, specs, price, pick, ref);
+    body.append(title, specs, price, pick);
     b.append(img, body);
     b.addEventListener('click', () => abrirFormulario({ tipo: tipo.nombre, vehiculoId: v.id, origen: b }));
     list.append(b);
@@ -325,20 +319,14 @@ fetch('/entregas/entregas.json').then((r) => r.json()).then((data) => {
     const title = document.createElement('strong');
     title.textContent = item.titulo;
     cap.append(title);
-    if (item.referencial) {
-      const note = document.createElement('span');
-      note.className = 'cap';
-      note.textContent = 'Imagen referencial';
-      cap.append(note);
-    }
     b.append(img, cap);
     b.addEventListener('click', () => {
       const pic = document.getElementById('light-img');
       setFoto(pic, item.imagen, 'min(960px, calc(100vw - 48px))');
       pic.loading = 'eager';
-      pic.alt = item.referencial ? 'Imagen referencial' : (item.titulo || '');
+      pic.alt = item.titulo || '';
       document.getElementById('light-titulo').textContent = item.titulo || '';
-      document.getElementById('light-cap').textContent = item.referencial ? 'Imagen referencial' : '';
+      document.getElementById('light-cap').textContent = '';
       light._origen = b;
       light.showModal();
     });
