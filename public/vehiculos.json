@@ -30,6 +30,7 @@
     }
   ],
   "vehiculos": [
+    { "id": "volkswagen-virtus", "tipo": "sedan", "nombre": "Volkswagen Virtus", "imagen": "images/vehiculos/volkswagen-virtus.webp?v=1", "imagenReferencia": "images/flota/sedan-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
     { "id": "kia-soluto", "tipo": "sedan", "nombre": "Kia Soluto", "imagen": "images/vehiculos/kia-soluto.webp?v=4", "imagenReferencia": "images/flota/sedan-01", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
     { "id": "chevrolet-onix", "tipo": "sedan", "nombre": "Chevrolet Onix Sedán", "imagen": "images/vehiculos/chevrolet-onix.webp?v=4", "imagenReferencia": "images/flota/sedan-02", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
     { "id": "changan-alsvin", "tipo": "sedan", "nombre": "Changan Alsvin", "imagen": "images/vehiculos/changan-alsvin.webp?v=4", "imagenReferencia": "images/flota/sedan-03", "specs": "[por completar: pasajeros, transmisión, maletas]", "precioDia": null },
